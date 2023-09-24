@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^18.5.0",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/stack": "^6.3.17",
     "@rneui/base": "^4.0.0-rc.8",
