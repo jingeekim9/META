@@ -3,7 +3,7 @@ import {View, Text} from "react-native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Input, Button } from '@rneui/base';
 
-export default function Login() {
+export default function Login(props) {
     return (
         <View
             style = {{
@@ -21,11 +21,11 @@ export default function Login() {
                         fontWeight: 'bold',
                         fontSize: hp(5),
                         marginTop: hp(10),
-                        marginLeft: hp(3),
+                        marginLeft: hp(2),
                         color: "#F5F6F8",
                     }}
                 >
-                    Log in with Email
+                    Log in
                 </Text>
             </View>
 
@@ -41,7 +41,7 @@ export default function Login() {
                     style = {{
                         marginTop: hp(1),
                         color: "#717678",
-                        marginLeft: hp(5)
+                        marginLeft: hp(2)
                     }}
                 >
                     E-mail address
@@ -49,16 +49,16 @@ export default function Login() {
                 <Input
                     placeholder = "abc@email.com"
                     inputContainerStyle={{
-                        width: hp(50),
-                        borderRadius: 10,
+                        borderRadius: hp(1),
                         backgroundColor: '#1A1A1A',
                         paddingHorizontal: hp(2),
+                        paddingVertical: hp(0.5),
                         marginTop: hp(1),
                         justifyContent:"center",
                         alignSelf:"center",
                         borderColor: '#212223',
-                        borderBottomWidth: hp(0.5),
-                        borderWidth: hp(0.5),
+                        borderBottomWidth: hp(0.3),
+                        borderWidth: hp(0.3),
                         color: "#717678"
                     }}
                     
@@ -69,26 +69,25 @@ export default function Login() {
                 {/* Password */}
                 <Text
                     style = {{
-                        marginTop: hp(-1),
                         color: "#717678",
-                        marginLeft: hp(5)
+                        marginLeft: hp(2)
                     }}
                 >
                     Password
                 </Text>
                 <Input
-                    placeholder = "At least 6 characters including alphabets"
+                    placeholder = "At least 8 characters"
                     inputContainerStyle={{
-                        width: hp(50),
-                        borderRadius: 10,
+                        borderRadius: hp(1),
                         backgroundColor: '#1A1A1A',
                         paddingHorizontal: hp(2),
+                        paddingVertical: hp(0.5),
                         marginTop: hp(1),
                         justifyContent:"center",
                         alignSelf:"center",
                         borderColor: '#212223',
-                        borderBottomWidth: hp(0.5),
-                        borderWidth: hp(0.5),
+                        borderBottomWidth: hp(0.3),
+                        borderWidth: hp(0.3),
                         color: "#717678"
                     }}
                     
@@ -98,49 +97,50 @@ export default function Login() {
             </View>
 
             {/* Button */}
-            <View>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    flex: 1
+                }}
+            >
                 <Button
                     titleStyle = {{
-                        color: "#717678"
+                        color: "white",
+                        fontWeight: 'bold'
                     }}
                     title={"Login"}
                     buttonStyle = {{
                         backgroundColor: '#2D3133',
-                        width: hp(50),
-                        borderRadius: hp(100),
-                        paddingHorizontal: hp(2),
+                        borderRadius: hp(10),
                         marginTop: hp(1),
                         justifyContent:"center",
                         alignSelf:"center",
-                        borderColor: '#212223',
-                        borderBottomWidth: hp(0.5),
-                        borderWidth: hp(0.5),
+                        width: '100%',
+                        paddingVertical: hp(1.3)
                     }}
                     containerStyle = {{
-                        
+                        paddingHorizontal: hp(2),
+                        flex: 1
                     }}
                 
                 >
                     
                 </Button> 
-
-                <Button
-                    titleStyle = {{
-                        color: '#B4B8B9',
+            </View>
+            <View
+                style={{
+                    marginBottom: hp(5),
+                    alignItems: 'center'
+                }}
+            >
+                <Text
+                    style={{
+                        color: '#5f6060',
                         fontSize: hp(2)
                     }}
-                    title={"Find My Email"}
-                    buttonStyle = {{
-                        backgroundColor: '#1A1A1A',
-                        width: hp(50),
-                        paddingHorizontal: hp(2),
-                        marginTop: hp(1),
-                        justifyContent:"center",
-                        alignSelf:"center"
-                    }}
                 >
-                    
-                </Button>
+                    Don't have an account? <Text style={{color: 'white', fontWeight: 'bold'}} onPress={() => {props.navigation.navigate("Register")}}>Register</Text>
+                </Text>
             </View>
         </View>
     )
