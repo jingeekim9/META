@@ -107,7 +107,7 @@ export default function Login() {
                     buttonStyle = {{
                         backgroundColor: '#2D3133',
                         width: hp(50),
-                        borderRadius: 10,
+                        borderRadius: hp(100),
                         paddingHorizontal: hp(2),
                         marginTop: hp(1),
                         justifyContent:"center",
