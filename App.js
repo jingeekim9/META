@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import Detail from './pages/Detail';
+import Admin from './pages/Admin/Admin';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,11 @@ export default function App() {
         <Stack.Screen
           name = "Detail"
           component = {Detail}
+          options = {{headerShown:false}}
+        />
+        <Stack.Screen
+          name = "Admin"
+          component = {Admin}
           options = {{headerShown:false}}
         />
       </Stack.Navigator>
