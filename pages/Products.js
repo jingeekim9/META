@@ -2,7 +2,46 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-export default function Home() {
+export default function Products() {
+    const [products, setProducts] = useState([
+        {
+            url: "https://m.media-amazon.com/images/I/61fOR8yqOmL._AC_SX679._SX._UX._SY._UY_.jpg",
+            name: "INDIE",
+            company: "xcvb",
+            price: 9584
+        },
+        {
+            url: "https://m.media-amazon.com/images/I/61HunMUy6BL._AC_SX679._SX._UX._SY._UY_.jpg",
+            name: "FUNK",
+            company: "hjkl",
+            price: 2342
+        },
+        {
+            url: "https://m.media-amazon.com/images/I/714XSiO1mtL._AC_SX679._SX._UX._SY._UY_.jpg",
+            name: "POP",
+            company: "ghjk",
+            price: 4859
+        },
+        {
+            url: "https://m.media-amazon.com/images/I/51znawVkEIL._AC_SX679._SX._UX._SY._UY_.jpg",
+            name: "CLASSIC",
+            company: "asdfg",
+            price: 3029
+        },
+        {
+            url: "https://m.media-amazon.com/images/I/71QNbYasFjL._AC_SX679._SX._UX._SY._UY_.jpg",
+            name: "MOZART",
+            company: "tyuio",
+            price: 23423
+        },
+        {
+            url: "https://m.media-amazon.com/images/I/61JOHamx0jL._AC_UX679_.jpg",
+            name: "VOLTAIRE",
+            company: "qwerty",
+            price: 1132
+        },
+    ])
+
     return (
         <View
             style={{
