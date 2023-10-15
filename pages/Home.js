@@ -40,12 +40,7 @@ export default function Home() {
                 TITLE
             </Text>
             <ScrollView>
-                <View
-                    style={{
-                        height: hp(12),
-                        width: "100%",
-                    }}
-                >
+                <View>
                     <Image
                         style={{
                             height: hp(45),
@@ -117,6 +112,9 @@ export default function Home() {
                             />
                         </View>
                     </View>
+
+                    {/* ********************************** */}
+
                     <Text
                         style={{
                             fontSize: hp(3),
@@ -129,7 +127,7 @@ export default function Home() {
                     </Text>
                     <View
                         style={{
-                            height: hp(30)
+                            height: hp(23.5)
                         }}
                     >
                         <ScrollView
@@ -190,6 +188,205 @@ export default function Home() {
                                     }}
                                 >
                                     cream shirt thing
+                                </Text>
+                            </View>
+                        </ScrollView>
+                    </View>
+
+                    {/* ********************************** */}
+
+                    <Text
+                        style={{
+                            fontSize: hp(3),
+                            fontWeight: "500",
+                            marginTop: hp(4),
+                            marginLeft: hp(1),
+                            marginBottom: hp(3)
+                        }}
+                    >
+                        Trending Now
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: "column",
+                            justifyContent: "space-around",
+                            height: hp(35)
+
+                        }}
+                    >
+                        <Text
+                            style={{
+                                textAlign: "center",
+                                fontSize: hp(2)
+                            }}
+                        >
+                            VARISTY JACKETS
+                        </Text>
+                        <View
+                            style={{
+                                backgroundColor: "#f0f0f2",
+                                alignSelf: "center",
+                                width: "92%",
+                                height: hp(0.1)
+                            }}
+                        ></View>
+                        <Text
+                            style={{
+                                textAlign: "center",
+                                fontSize: hp(2)
+                            }}
+                        >
+                            SWEATER SEASON
+                        </Text>
+                        <View
+                            style={{
+                                backgroundColor: "#f0f0f2",
+                                alignSelf: "center",
+                                width: "92%",
+                                height: hp(0.1)
+                            }}
+                        ></View>
+                        <Text
+                            style={{
+                                textAlign: "center",
+                                fontSize: hp(2)
+                            }}
+                        >
+                            LEATHER JACKETS
+                        </Text>
+                        <View
+                            style={{
+                                backgroundColor: "#f0f0f2",
+                                alignSelf: "center",
+                                width: "92%",
+                                height: hp(0.1)
+                            }}
+                        ></View>
+                        <Text
+                            style={{
+                                textAlign: "center",
+                                fontSize: hp(2)
+                            }}
+                        >
+                            SHOULDER BAGS
+                        </Text>
+                    </View>
+
+                    {/* ********************************** */}
+
+                    <Text
+                        style={{
+                            fontSize: hp(3),
+                            fontWeight: "500",
+                            marginTop: hp(4),
+                            marginLeft: hp(1),
+                            marginBottom: hp(2.4)
+                        }}
+                    >
+                        Popular Brands of Seoul
+                    </Text>
+                    <View
+                        style={{
+                            height: hp(60)
+                        }}
+                    >
+                        <ScrollView
+                            horizontal={true}
+                            decelerationRate={0}
+                            snapToInterval={hp(42)}
+                            snapToAlignment={"center"}
+                        >
+                            <View>
+                                <Image
+                                    style={{
+                                        height: hp(50),
+                                        width: hp(40),
+                                        marginLeft: hp(2)
+                                    }}
+                                    source={{
+                                        uri: "https://image.musinsa.com/mfile_s01/2021/04/07/3fb5ed13afe8714a7e5d13ee506003dd143755.jpg"
+                                    }}
+                                />
+                                <Text
+                                    style={{
+                                        marginLeft: hp(2),
+                                        marginTop: hp(1),
+                                        fontWeight: "500",
+                                        fontSize: hp(2.5)
+                                    }}
+                                >
+                                    VOLANTE
+                                </Text>
+                                <Text
+                                    style={{
+                                        marginLeft: hp(2),
+                                        marginTop: hp(1),
+                                        fontSize: hp(1.8)
+                                    }}
+                                >
+                                    FW23 easy & comfy styles
+                                </Text>
+                            </View>
+                            <View>
+                                <Image
+                                    style={{
+                                        height: hp(50),
+                                        width: hp(40),
+                                        marginLeft: hp(1)
+                                    }}
+                                    source={{
+                                        uri: "https://image.musinsa.com/mfile_s01/2022/02/23/8e2171ee6437c653bdcbcd807ccd8c72143902.jpg"
+                                    }}
+                                />
+                                <Text
+                                    style={{
+                                        marginLeft: hp(2),
+                                        marginTop: hp(1),
+                                        fontWeight: "500",
+                                        fontSize: hp(2.5)
+                                    }}
+                                >
+                                    MUNIER
+                                </Text>
+                                <Text
+                                    style={{
+                                        marginLeft: hp(2),
+                                        marginTop: hp(1),
+                                        fontSize: hp(1.8)
+                                    }}
+                                >
+                                    FW23 collection Hype & Street
+                                </Text>
+                            </View>
+                            <View>
+                                <Image
+                                    style={{
+                                        height: hp(50),
+                                        width: hp(40),
+                                        marginLeft: hp(1)
+                                    }}
+                                    source={{
+                                        uri: "https://www.ktnews.com/news/photo/202102/118136_75566_3350.jpg"
+                                    }}
+                                />
+                                <Text
+                                    style={{
+                                        marginLeft: hp(2),
+                                        marginTop: hp(1),
+                                        fontWeight: "500",
+                                        fontSize: hp(2.5)
+                                    }}
+                                >
+                                    GLW
+                                </Text>
+                                <Text
+                                    style={{
+                                        marginLeft: hp(2),
+                                        marginTop: hp(1),
+                                        fontSize: hp(1.8)
+                                    }}
+                                >
+                                    New brand release — VOLTEX collection
                                 </Text>
                             </View>
                         </ScrollView>
