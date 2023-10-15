@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { Divider, useTheme, Icon, Header as HeaderRNE, HeaderProps } from '@rneui/themed';
-import { ScrollView, StyleSheet, View,Text,Linking,StyleProp, TextStyle, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, View,Text,Linking,StyleProp, TextStyle, TouchableOpacity, SafeAreaView } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { StatusBar } from 'expo-status-bar';
 
 export default function Admin(props) {
 return (
-  <>
+  <SafeAreaView>
     <ScrollView>
       <Text style={styles.subHeader}>쇼핑몰 관리자앱</Text>
       <Text style={styles.subHeader3}>2023.08.05</Text>
@@ -81,6 +82,9 @@ return (
                 width: wp(30),
                 paddingVertical: hp(3)
             }}
+            onPress={() => {
+              props.navigation.navigate("AddProduct");
+            }}
         >
             <Text
                 style={{
@@ -95,6 +99,9 @@ return (
             style={{
                 width: wp(30),
                 paddingVertical: hp(3)
+            }}
+            onPress={() => {
+              props.navigation.navigate("ViewProduct");
             }}
         >
             <Text
@@ -177,7 +184,8 @@ return (
       <Divider/>
       <Text style={styles.subHeader2}>공지:  시스템 정기점검안내</Text>
     </ScrollView>
-  </>
+    <StatusBar style="dark" />
+  </SafeAreaView>
 );
 };
 const styles = StyleSheet.create({
