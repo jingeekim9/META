@@ -7,39 +7,45 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Detail from './pages/Detail';
 import Admin from './pages/Admin/Admin';
+import Products from './pages/Products';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home'>
+      <Stack.Navigator initialRouteName='Products'>
         <Stack.Screen
-        name="Login"
-        component={Login} 
-        options = {{
-          headerShown: false
-        }}
-        />
-        <Stack.Screen 
-          name="Register" 
-          component={Register} 
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="Home" 
-          component={Home} 
-          options={{headerShown:false}}
+          name="Login"
+          component={Login}
+          options={{
+            headerShown: false
+          }}
         />
         <Stack.Screen
-          name = "Detail"
-          component = {Detail}
-          options = {{headerShown:false}}
+          name="Register"
+          component={Register}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-          name = "Admin"
-          component = {Admin}
-          options = {{headerShown:false}}
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Products"
+          component={Products}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Detail"
+          component={Detail}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Admin"
+          component={Admin}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
