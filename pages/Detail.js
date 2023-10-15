@@ -7,7 +7,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, addDoc, getFirestore, query, where, getDocs } from "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Icon } from '@rneui/themed';
+import { Icon, AirbnbRating } from '@rneui/themed';
 import { Image } from "react-native";
 
 export default function Detail(props) {
@@ -15,33 +15,34 @@ export default function Detail(props) {
     return (
         <SafeAreaView
             style={{
-                flex: 1
+                flex: 1,
+                backgroundColor: 'white'
             }}
         >
             {/* Top Bar */}
             {/* Icon Bar */}
             <View
-                style = {{
+                style={{
                     height: hp(7),
                     flexDirection: 'row',
                     alignItems: 'center'
                 }}>
-                    <Image
-                        style={{
-                            width: hp(2.5),
-                            height: hp(2.5),
-                            marginLeft: hp(2)
-                        }}
-                        source={require('../assets/left-arrow.png')}
-                    />
-                    <Text
-                        style = {{
-                            fontSize: hp(3),
-                            paddingLeft: hp(1),
-                            fontWeight: 'bold'
-                        }}>
-                        Company Name
-                    </Text>
+                <Image
+                    style={{
+                        width: hp(2.5),
+                        height: hp(2.5),
+                        marginLeft: hp(2)
+                    }}
+                    source={require('../assets/left-arrow.png')}
+                />
+                <Text
+                    style={{
+                        fontSize: hp(3),
+                        paddingLeft: hp(1),
+                        fontWeight: 'bold'
+                    }}>
+                    Company Name
+                </Text>
             </View>
             <View
                 style={{
@@ -49,135 +50,148 @@ export default function Detail(props) {
                 }}
             >
                 <ScrollView>
-                {/* Big Image */}
+                    {/* Big Image */}
                     <View>
                         <Image
                             style={{
                                 width: wp(100),
-                                height: hp(40),
+                                height: hp(50),
                                 justifyContent: "center",
                                 alignItems: "center"
                             }}
                             source={require('../assets/tshirt.png')}
+                            resizeMode="cover"
                         />
 
                         <View
                             style={{
-                                flexDirection: "row"
+                                flexDirection: "row",
+                                justifyContent: 'space-between',
+                                paddingVertical: hp(2),
+                                alignItems: 'center'
                             }}>
                             <Text
-                                style ={{
-                                    paddingTop: hp(1.5),
-                                    paddingBottom: hp(1.5),
-                                    paddingLeft: hp(2),
+                                style={{
+                                    marginLeft: hp(2),
+                                    fontSize: hp(1.8),
+                                    color: '#ababab',
+                                    fontWeight: 'bold'
                                 }}>
-                                Company Name
+                                Category
                             </Text>
                             <Icon
-                                style ={{
-                                    paddingTop: hp(0.5),
-                                    paddingLeft: wp(60)
+                                style={{
+                                    marginRight: hp(2)
                                 }}
-                                type = "ionicon"
-                                name = "share-outline">
+                                type="ionicon"
+                                name="share-outline">
 
                             </Icon>
                         </View>
-                        
                         <View
                             style={{
-                                borderBottomColor: "gray",
-                                width: "100%",
-                                borderBottomWidth: 1
-                            }}>
-
-                        </View>
-                        
-                        <View
-                            style= {{
                                 backgroundColor: "white",
-
-                            }}
-                            containerStyle = {{
-                                paddingLeft: hp(5)
+                                paddingHorizontal: hp(2),
+                                paddingVertical: hp(1)
                             }}>
                             <View
-                                style = {{
-                                    height: hp(5),
+                                style={{
                                     justifyContent: 'center'
-                                }}>
+                                }}
+                            >
                                 <Text
-                                    style = {{
-                                        paddingLeft: hp(4),
-                                        marginTop: hp(1),
-                                        fontSize: hp(4),
+                                    style={{
+                                        fontSize: hp(2.5),
+                                        fontWeight: 'bold'
                                     }}>
-                                    tshirt
+                                    Black T-Shirt
                                 </Text>
-                                
+
                             </View>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    marginVertical: hp(2)
+                                }}
+                            >
+                                <AirbnbRating
+                                    count={5}
+                                    defaultRating={4}
+                                    size={hp(2)}
+                                    showRating={false}
+                                />
                                 <Text
-                                    style = {{
-                                        marginLeft: hp(4),
-                                        marginTop: hp(2),
-                                        fontSize: hp(5),
-                                        fontWeight: "bold"
-                                    }}>
-                                    20$
+                                    style={{
+                                        fontWeight: '700',
+                                        color: '#057cfc',
+                                        marginLeft: hp(1)
+                                    }}
+                                >
+                                    후기 128개
                                 </Text>
+                            </View>
+                            <Text
+                                style={{
+                                    fontSize: hp(2.8),
+                                    fontWeight: '500'
+                                }}>
+                                20,000원
+                            </Text>
                         </View>
                     </View>
                 </ScrollView>
             </View>
             {/* Bottom thingy */}
             <View
-                    style ={{
-                        borderTopColor: '#F1EFEF',
-                        borderTopWidth: 2,
-                        padding: hp(2),
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: "space-between"
-                    }}>
-                    <Button
-                        style ={{
-                            width: hp(35)
+                style={{
+                    borderTopColor: '#F1EFEF',
+                    borderTopWidth: 2,
+                    padding: hp(2),
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: "space-around"
+                }}>
+                <Button
+                    style={{
+                        width: hp(35)
+                    }}
+                    buttonStyle={{
+                        backgroundColor: "#1A1A1A",
+                        borderRadius: hp(1),
+                        height: hp(7)
+                    }}
+                    titleStyle={{
+                        fontWeight: 'bold',
+                        color: 'white'
+                    }}
+                >
+
+                    Checkout
+                </Button>
+                <View>
+                    <Icon
+                        name={heartPressed ? "heart" : "heart-outline"}
+                        type="ionicon"
+                        color={heartPressed ? "red" : "black"}
+                        onPress={() => {
+                            setHeartPress(!heartPressed)
                         }}
-                        buttonStyle ={{
-                            backgroundColor: "#FA6DE2",
-                            borderRadius: hp(10),
-                            height: hp(7)
-                        }}
+                        size={hp(4)}
                     >
-                        
-                            Checkout
-                    </Button>
-                    <View>
-                        <Text>
-                            Total Price: $45
-                        </Text>
 
-                        <Icon
-                            name = {heartPressed ? "heart" : "heart-outline"}
-                            type = "ionicon"
-                            color = {heartPressed ? "red" : "black"}
-                            onPress = {() => {
-                                setHeartPress(!heartPressed)
-                            }}
-                            >
 
-                                
-                        </Icon>
-                    </View>
-                    
+                    </Icon>
                 </View>
 
-        </SafeAreaView>
-            
+            </View>
 
-        
+        </SafeAreaView>
+
+
+
 
 
     )
-    
+
 }
