@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, Platform, ScrollView } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Input, Button } from '@rneui/base';
+import { Input, Button, color } from '@rneui/base';
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, addDoc, getFirestore, query, where, getDocs } from "firebase/firestore";
@@ -11,6 +11,7 @@ import { Icon } from '@rneui/themed';
 import { Image } from "react-native";
 
 export default function Detail(props) {
+    const [heartPressed, setHeartPress] = useState(false);
     return (
         <SafeAreaView
             style={{
@@ -61,18 +62,69 @@ export default function Detail(props) {
                         />
 
                         <View
-                            style = {{
-                                backgroundColor: "#121314",
-                                height: hp(5),
-                                justifyContent: 'center'
+                            style={{
+                                flexDirection: "row"
                             }}>
                             <Text
-                                style = {{
-                                    color: "white",
-                                    paddingLeft: hp(3)
+                                style ={{
+                                    paddingTop: hp(1.5),
+                                    paddingBottom: hp(1.5),
+                                    paddingLeft: hp(2),
                                 }}>
-                                tshirt
+                                Company Name
                             </Text>
+                            <Icon
+                                style ={{
+                                    paddingTop: hp(0.5),
+                                    paddingLeft: wp(60)
+                                }}
+                                type = "ionicon"
+                                name = "share-outline">
+
+                            </Icon>
+                        </View>
+                        
+                        <View
+                            style={{
+                                borderBottomColor: "gray",
+                                width: "100%",
+                                borderBottomWidth: 1
+                            }}>
+
+                        </View>
+                        
+                        <View
+                            style= {{
+                                backgroundColor: "white",
+
+                            }}
+                            containerStyle = {{
+                                paddingLeft: hp(5)
+                            }}>
+                            <View
+                                style = {{
+                                    height: hp(5),
+                                    justifyContent: 'center'
+                                }}>
+                                <Text
+                                    style = {{
+                                        paddingLeft: hp(4),
+                                        marginTop: hp(1),
+                                        fontSize: hp(4),
+                                    }}>
+                                    tshirt
+                                </Text>
+                                
+                            </View>
+                                <Text
+                                    style = {{
+                                        marginLeft: hp(4),
+                                        marginTop: hp(2),
+                                        fontSize: hp(5),
+                                        fontWeight: "bold"
+                                    }}>
+                                    20$
+                                </Text>
                         </View>
                     </View>
                 </ScrollView>
@@ -89,15 +141,35 @@ export default function Detail(props) {
                     }}>
                     <Button
                         style ={{
-                            borderRadius: hp(5),
-                            width: hp(20),
-                            color : "pink"
-                        }}>
+                            width: hp(35)
+                        }}
+                        buttonStyle ={{
+                            backgroundColor: "#FA6DE2",
+                            borderRadius: hp(10),
+                            height: hp(7)
+                        }}
+                    >
+                        
                             Checkout
                     </Button>
-                    <Text>
-                        Total Price: $45
-                    </Text>
+                    <View>
+                        <Text>
+                            Total Price: $45
+                        </Text>
+
+                        <Icon
+                            name = {heartPressed ? "heart" : "heart-outline"}
+                            type = "ionicon"
+                            color = {heartPressed ? "red" : "black"}
+                            onPress = {() => {
+                                setHeartPress(!heartPressed)
+                            }}
+                            >
+
+                                
+                        </Icon>
+                    </View>
+                    
                 </View>
 
         </SafeAreaView>
