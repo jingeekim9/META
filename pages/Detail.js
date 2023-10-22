@@ -12,7 +12,9 @@ import { Image } from "react-native";
 
 export default function Detail(props) {
     const [heartPressed, setHeartPress] = useState(false);
-    const [checkout, setCheckout] = useState(false);
+    const [checkoutPressed, setcheckoutPressed] = useState(false);
+    const [options1Pressed, setoptions1Pressed] = useState(false);
+    const [options2Pressed, setoptions2Pressed] = useState(false);
     return (
         <SafeAreaView
             style={{
@@ -141,20 +143,95 @@ export default function Detail(props) {
                             </Text>
                         </View>
                     </View>
+
+                    {/* Long Image */}
+                    <View
+                        style = {{
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
+                        <Image
+                                style={{
+                                    marginTop: hp(5)
+                            }}
+                            source={require('../assets/guy1.png')}
+
+                        />
+                        <Image
+                                style={{
+                                    marginTop: hp(5)
+                            }}
+                            source={require('../assets/guy2.png')}
+
+                        />
+                        <Image
+                                style={{
+                                    marginTop: hp(5)
+                            }}
+                            source={require('../assets/guy3.png')}
+
+                        />
+                    </View>
                 </ScrollView>
             </View>
+
+            
+
             {/* Bottom thingy */}
+            <View
+                style = {{
+                    height: hp(20),
+                    width: wp(100)
+                }}>
+                <Button
+                    style = {{
+                        paddingTop: hp(5)
+                    }}
+                    containerStyle={{
+                        width: wp(30),
+                        marginLeft: 'auto',
+                        marginRight: 'auto'
+                    }}
+                    onPress={() => {
+                        setoptions1Pressed(!options1Pressed)
+                    }}
+                    >
+                        options
+                </Button>
+            </View>
             <View>
                 {
-                    checkout &&
+                    checkoutPressed ?
                     <View
                         style={{
-                            width: wp(100),
-                            height: hp(20)
-                        }}
-                    >
+                            borderTopColor: '#F1EFEF',
+                            borderTopWidth: 2,
+                            padding: hp(2),
+                            flexDirection: 'row'}}>
+                        
+                        
+
+                        <Button
+                            style={{
+                                width:hp(20)
+                            }}
+                            buttonStyle={{
+                                backgroundColor: "#1A1A1A",
+                                borderRadius: hp(1),
+                                height: hp(7)
+                            }}
+                            titleStyle={{
+                                fontWeight: 'bold',
+                                color: 'white'
+                            }}
+                        >
+
+                            Checkout
+                        </Button>
                     </View>
-                }
+
+                    :
+                
                 <View
                     style={{
                         borderTopColor: '#F1EFEF',
@@ -164,6 +241,7 @@ export default function Detail(props) {
                         alignItems: 'center',
                         justifyContent: "space-around"
                     }}>
+                        
                     <Button
                         style={{
                             width: hp(35)
@@ -178,7 +256,7 @@ export default function Detail(props) {
                             color: 'white'
                         }}
                         onPress={() => {
-                            setCheckout(!checkout)
+                            setcheckoutPressed(!checkoutPressed)
                         }}
                     >
 
@@ -200,7 +278,19 @@ export default function Detail(props) {
                     </View>
 
                 </View>
+                }
             </View>
+
+            {/* Bottom Thingy 2 */}
+
+            
+
+
+
+
+
+            {/* Bottom Thingy 3 */}
+            
 
         </SafeAreaView>
 
