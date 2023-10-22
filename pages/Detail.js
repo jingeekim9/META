@@ -12,6 +12,7 @@ import { Image } from "react-native";
 
 export default function Detail(props) {
     const [heartPressed, setHeartPress] = useState(false);
+    const [checkout, setCheckout] = useState(false);
     return (
         <SafeAreaView
             style={{
@@ -143,47 +144,62 @@ export default function Detail(props) {
                 </ScrollView>
             </View>
             {/* Bottom thingy */}
-            <View
-                style={{
-                    borderTopColor: '#F1EFEF',
-                    borderTopWidth: 2,
-                    padding: hp(2),
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: "space-around"
-                }}>
-                <Button
-                    style={{
-                        width: hp(35)
-                    }}
-                    buttonStyle={{
-                        backgroundColor: "#1A1A1A",
-                        borderRadius: hp(1),
-                        height: hp(7)
-                    }}
-                    titleStyle={{
-                        fontWeight: 'bold',
-                        color: 'white'
-                    }}
-                >
-
-                    Checkout
-                </Button>
-                <View>
-                    <Icon
-                        name={heartPressed ? "heart" : "heart-outline"}
-                        type="ionicon"
-                        color={heartPressed ? "red" : "black"}
-                        onPress={() => {
-                            setHeartPress(!heartPressed)
+            <View>
+                {
+                    checkout &&
+                    <View
+                        style={{
+                            width: wp(100),
+                            height: hp(20)
                         }}
-                        size={hp(4)}
+                    >
+                    </View>
+                }
+                <View
+                    style={{
+                        borderTopColor: '#F1EFEF',
+                        borderTopWidth: 2,
+                        padding: hp(2),
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: "space-around"
+                    }}>
+                    <Button
+                        style={{
+                            width: hp(35)
+                        }}
+                        buttonStyle={{
+                            backgroundColor: "#1A1A1A",
+                            borderRadius: hp(1),
+                            height: hp(7)
+                        }}
+                        titleStyle={{
+                            fontWeight: 'bold',
+                            color: 'white'
+                        }}
+                        onPress={() => {
+                            setCheckout(!checkout)
+                        }}
                     >
 
+                        Checkout
+                    </Button>
+                    <View>
+                        <Icon
+                            name={heartPressed ? "heart" : "heart-outline"}
+                            type="ionicon"
+                            color={heartPressed ? "red" : "black"}
+                            onPress={() => {
+                                setHeartPress(!heartPressed)
+                            }}
+                            size={hp(4)}
+                        >
 
-                    </Icon>
+
+                        </Icon>
+                    </View>
+
                 </View>
-
             </View>
 
         </SafeAreaView>
