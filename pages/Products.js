@@ -40,11 +40,19 @@ export default function Products() {
             company: "qwerty",
             price: 1132
         },
-    ])
+    ]);
+    const [showNum, setShowNum] = useState(2);
 
-    const res = [];
-    for (let i = 0; i < products.length; i += 2) {
-        res.push(products.slice(i, i + 2));
+    function chunk (arr, len) {
+        var chunks = [],
+            i = 0,
+            n = arr.length;
+      
+        while (i < n) {
+          chunks.push(arr.slice(i, i += len));
+        }
+      
+        return chunks;
     }
 
     return (
@@ -110,53 +118,59 @@ export default function Products() {
                         flexDirection: "column"
                     }}
                 >
-                    <View
-                        style={{
-                            flexDirection: "row"
-                        }}
-                    >
+                    <View>
                         {
-                            res.map((el, ind) => (
-                                el.map((el2, ind2) => (
-                                    <View>
-                                        <Image
-                                            style={{
-                                                height: hp(20),
-                                                width: hp(20),
-                                                marginBottom: hp(1),
-                                                marginLeft: hp(1)
-                                            }}
-                                            source={{
-                                                uri: el2["url"]
-                                            }}
-                                        />
-                                        <Text
-                                            style={{
-                                                fontWeight: "600",
-                                                marginLeft: hp(2),
-                                            }}
-                                        >
-                                            {el2["name"]}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                marginLeft: hp(2)
-                                            }}
-                                        >
-                                            {el2["company"]}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                marginLeft: hp(2),
-                                                marginTop: hp(1),
-                                                fontWeight: "500",
-                                            }}
-                                        >
-                                            ${el2["price"]}
-                                        </Text>
-                                        
-                                    </View>
-                                ))
+                            chunk(products, 2).slice(0, showNum).map((el, ind) => (
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        marginBottom: hp(4),
+                                        justifyContent: 'space-around'
+                                    }}
+                                >
+                                    {
+                                        el.map((el2, ind2) => (
+                                            <View>
+                                                <Image
+                                                    style={{
+                                                        height: hp(20),
+                                                        width: hp(20),
+                                                        marginBottom: hp(1),
+                                                        marginLeft: hp(1)
+                                                    }}
+                                                    source={{
+                                                        uri: el2["url"]
+                                                    }}
+                                                />
+                                                <Text
+                                                    style={{
+                                                        fontWeight: "600",
+                                                        marginLeft: hp(2),
+                                                    }}
+                                                >
+                                                    {el2["name"]}
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        marginLeft: hp(2)
+                                                    }}
+                                                >
+                                                    {el2["company"]}
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        marginLeft: hp(2),
+                                                        marginTop: hp(1),
+                                                        fontWeight: "500",
+                                                    }}
+                                                >
+                                                    ${el2["price"]}
+                                                </Text>
+                                                
+                                            </View>
+                                        ))
+                                    }
+                                </View>  
                             ))
                         }
                     </View>
@@ -176,6 +190,9 @@ export default function Products() {
                             borderColor: "black",
                             borderRadius: hp(1),
                             borderWidth: hp(0.1)
+                        }}
+                        onPress={() => {
+                            setShowNum(showNum + 1)
                         }}
                     >
                         Explore More ▼
