@@ -13,7 +13,9 @@ return (
       <Text style={styles.subHeader3}>2023.08.05</Text>
       <View style={styles.vertical}>
         <Text>주문접수</Text>
-        <Divider orientation="vertical" />
+        <Divider style={{
+                color : "black"
+            }} orientation="vertical" />
         <Text>10건</Text>
       </View>
       <View style={styles.vertical}>
@@ -34,7 +36,8 @@ return (
         style={{
             flexDirection: 'row',
             justifyContent: 'space-around',
-            height: wp(15)
+            height: wp(15),
+            backgroundColor : "white"
         }}
       >
         <Icon
@@ -54,7 +57,8 @@ return (
         style={{
             flexDirection: 'row',
             justifyContent: 'space-around',
-            height: wp(15)
+            height: wp(15),
+            backgroundColor : "white"
         }}
       >
         <Icon
@@ -74,13 +78,15 @@ return (
       <View
         style={{
             flexDirection: 'row',
-            justifyContent: 'space-around'
+            justifyContent: 'space-around',
+            backgroundColor : "white"
         }}
       >
         <TouchableOpacity
             style={{
                 width: wp(30),
-                paddingVertical: hp(3)
+                paddingVertical: hp(3),
+                backgroundColor : "white"
             }}
             onPress={() => {
               props.navigation.navigate("AddProduct");
@@ -98,7 +104,8 @@ return (
         <TouchableOpacity
             style={{
                 width: wp(30),
-                paddingVertical: hp(3)
+                paddingVertical: hp(3),
+                backgroundColor : "white"
             }}
             onPress={() => {
               props.navigation.navigate("ViewProduct");
@@ -120,14 +127,16 @@ return (
         style={{
             flexDirection: 'row',
             justifyContent: 'space-around',
-            height: wp(17)
+            height: wp(17),
+            backgroundColor : "white"
         }}
       >
         <TouchableOpacity
             style={{
                 height: wp(30),
                 width: wp(15),
-                paddingVertical: hp(2)
+                paddingVertical: hp(2),
+                backgroundColor : "white"
             }}
         >
             <Icon  
@@ -135,13 +144,15 @@ return (
               name='person-add-outline'
               type='ionicon'
               color='black'
+              backgroundColor = "white"
             />
         </TouchableOpacity>
         <TouchableOpacity
             style={{
                 height: wp(30),
                 width: wp(15),
-                paddingVertical: hp(2)
+                paddingVertical: hp(2),
+                backgroundColor : "white"
             }}
         >
             <Icon
@@ -149,13 +160,15 @@ return (
               name='people-outline'
               type='ionicon'
               color='black'
+              backgroundColor = "white"
             />
         </TouchableOpacity>
         <TouchableOpacity
             style={{
                 height: wp(30),
                 width: wp(15),
-                paddingVertical: hp(2)
+                paddingVertical: hp(2),
+                backgroundColor : "white"
             }}
         >
             <Icon
@@ -163,13 +176,15 @@ return (
               name='chatbubbles-outline'
               type='ionicon'
               color='black'
+              backgroundColor = "white"
             />
         </TouchableOpacity>
         <TouchableOpacity
             style={{
                 height: wp(30),
                 width: wp(15),
-                paddingVertical: hp(2)
+                paddingVertical: hp(2),
+                backgroundColor : "white"
             }}
         >
             <Icon
@@ -177,6 +192,7 @@ return (
               name='reader-outline'
               type='ionicon'
               color='black'
+              backgroundColor = "white"
             />
         </TouchableOpacity>
       </View>
@@ -190,17 +206,17 @@ return (
 };
 const styles = StyleSheet.create({
 subHeader: {
-  backgroundColor : "#4aa9b0",
-  color : "white",
+  backgroundColor : "white",
+  color : "black",
   textAlign : "center",
   paddingVertical : 20,
-  marginBottom : 5,
+  marginBottom : 2,
   fontSize: 18,
-  height: 70
+  height: 60
 },
 subHeaderr: {
-  backgroundColor : "#4aa9b0",
-  color : "white",
+  backgroundColor : "white",
+  color : "black",
   textAlign : "center",
   paddingVertical : 10,
   marginBottom : 10,
@@ -222,10 +238,12 @@ subHeader3: {
   marginBottom : 5,
   fontSize: 12,
   paddingLeft: 10,
+  backgroundColor : "white"
 
 },
 horizontal: {
   marginBottom: 10,
+  backgroundColor : "white"
 },
 horizontal2: {
   backgroundColor:'white'
@@ -234,27 +252,32 @@ horizontalText: {
   textAlign: 'center',
   fontSize: 15,
   marginVertical: 3,
+  backgroundColor : "white"
 
 },
 horizontalText2: {
   textAlign: 'center',
   fontSize: 15,
   marginVertical: 17,
-  fontWeight: 'bold'
+  fontWeight: 'bold',
+  backgroundColor : "white"
 },
 subhorizontalText: {
   textAlign: 'center',
   fontSize: 20,
+  backgroundColor : "white"
 },
 subhorizontalText2: {
   textAlign: 'left',
   fontSize: 12,
   paddingLeft: 10,
+  backgroundColor : "white"
 },
 vertical: {
   marginBottom: 8,
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-evenly',
+  backgroundColor: 'white'
 },
 });
