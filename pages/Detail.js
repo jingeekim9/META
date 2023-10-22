@@ -12,6 +12,9 @@ import { Image } from "react-native";
 
 export default function Detail(props) {
     const [heartPressed, setHeartPress] = useState(false);
+    const [checkoutPressed, setcheckoutPressed] = useState(false);
+    const [options1Pressed, setoptions1Pressed] = useState(false);
+    const [options2Pressed, setoptions2Pressed] = useState(false);
     return (
         <SafeAreaView
             style={{
@@ -140,51 +143,154 @@ export default function Detail(props) {
                             </Text>
                         </View>
                     </View>
+
+                    {/* Long Image */}
+                    <View
+                        style = {{
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
+                        <Image
+                                style={{
+                                    marginTop: hp(5)
+                            }}
+                            source={require('../assets/guy1.png')}
+
+                        />
+                        <Image
+                                style={{
+                                    marginTop: hp(5)
+                            }}
+                            source={require('../assets/guy2.png')}
+
+                        />
+                        <Image
+                                style={{
+                                    marginTop: hp(5)
+                            }}
+                            source={require('../assets/guy3.png')}
+
+                        />
+                    </View>
                 </ScrollView>
             </View>
+
+            
+
             {/* Bottom thingy */}
             <View
-                style={{
-                    borderTopColor: '#F1EFEF',
-                    borderTopWidth: 2,
-                    padding: hp(2),
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: "space-around"
+                style = {{
+                    height: hp(20),
+                    width: wp(100)
                 }}>
                 <Button
-                    style={{
-                        width: hp(35)
+                    style = {{
+                        paddingTop: hp(5)
                     }}
-                    buttonStyle={{
-                        backgroundColor: "#1A1A1A",
-                        borderRadius: hp(1),
-                        height: hp(7)
+                    containerStyle={{
+                        width: wp(30),
+                        marginLeft: 'auto',
+                        marginRight: 'auto'
                     }}
-                    titleStyle={{
-                        fontWeight: 'bold',
-                        color: 'white'
+                    onPress={() => {
+                        setoptions1Pressed(!options1Pressed)
                     }}
-                >
-
-                    Checkout
+                    >
+                        options
                 </Button>
-                <View>
-                    <Icon
-                        name={heartPressed ? "heart" : "heart-outline"}
-                        type="ionicon"
-                        color={heartPressed ? "red" : "black"}
-                        onPress={() => {
-                            setHeartPress(!heartPressed)
+            </View>
+            <View>
+                {
+                    checkoutPressed ?
+                    <View
+                        style={{
+                            borderTopColor: '#F1EFEF',
+                            borderTopWidth: 2,
+                            padding: hp(2),
+                            flexDirection: 'row'}}>
+                        
+                        
+
+                        <Button
+                            style={{
+                                width:hp(20)
+                            }}
+                            buttonStyle={{
+                                backgroundColor: "#1A1A1A",
+                                borderRadius: hp(1),
+                                height: hp(7)
+                            }}
+                            titleStyle={{
+                                fontWeight: 'bold',
+                                color: 'white'
+                            }}
+                        >
+
+                            Checkout
+                        </Button>
+                    </View>
+
+                    :
+                
+                <View
+                    style={{
+                        borderTopColor: '#F1EFEF',
+                        borderTopWidth: 2,
+                        padding: hp(2),
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: "space-around"
+                    }}>
+                        
+                    <Button
+                        style={{
+                            width: hp(35)
                         }}
-                        size={hp(4)}
+                        buttonStyle={{
+                            backgroundColor: "#1A1A1A",
+                            borderRadius: hp(1),
+                            height: hp(7)
+                        }}
+                        titleStyle={{
+                            fontWeight: 'bold',
+                            color: 'white'
+                        }}
+                        onPress={() => {
+                            setcheckoutPressed(!checkoutPressed)
+                        }}
                     >
 
+                        Checkout
+                    </Button>
+                    <View>
+                        <Icon
+                            name={heartPressed ? "heart" : "heart-outline"}
+                            type="ionicon"
+                            color={heartPressed ? "red" : "black"}
+                            onPress={() => {
+                                setHeartPress(!heartPressed)
+                            }}
+                            size={hp(4)}
+                        >
 
-                    </Icon>
+
+                        </Icon>
+                    </View>
+
                 </View>
-
+                }
             </View>
+
+            {/* Bottom Thingy 2 */}
+
+            
+
+
+
+
+
+            {/* Bottom Thingy 3 */}
+            
 
         </SafeAreaView>
 
