@@ -1,10 +1,138 @@
 import React, { useState } from "react";
-import { View, Text, Image, TextInput, ScrollView, StyleProp, TextStyle, StyleSheet } from "react-native";
+import { View, Text, Image, TextInput, ScrollView, StyleProp, TextStyle, StyleSheet, Platform } from "react-native";
 import { Input, Button, ButtonGroup, ListItem } from '@rneui/themed';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as ImagePicker from "expo-image-picker";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import uuid from "uuid";
+import { initializeApp } from "firebase/app";
+import { collection, doc, addDoc, getFirestore } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Toast from "react-native-toast-message";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
+    authDomain: "meta-fc205.firebaseapp.com",
+    projectId: "meta-fc205",
+    storageBucket: "meta-fc205.appspot.com",
+    messagingSenderId: "313671883891",
+    appId: "1:313671883891:web:3ecf94acf648ee9ba85e06",
+    measurementId: "G-953P5N046G"
+};
+
+// Initialize Firebase in general
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export default function AddProduct() {
+    const [productImage, setProductImage] = useState(null); 
+    const [productName, setProductName] = useState("");
+    const [price, setPrice] = useState(0);
+    const [category, setCategory] = useState("");
+    const [size, setSize] = useState("");
+    const [color, setColor] = useState("");
+    const [description, setDescription] = useState("");
+
+    const pickImage = async() => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+            exif: true
+        });
+
+        if(!result.canceled) {
+            setProductImage(result.assets[0].uri)
+        }
+    }
+
+    const addProduct = async() => {
+        if (productName == "") {
+            Toast.show({
+                type: 'error',
+                text1: 'Please add product name.'
+            });
+            return;
+        }
+        else if (price == "") {
+            Toast.show({
+                type: 'error',
+                text1: 'Please add product price.'
+            });
+            return;
+        }
+        else if (category == "") {
+            Toast.show({
+                type: 'error',
+                text1: 'Please add product category.'
+            });
+            return;
+        }
+        else if (size == "") {
+            Toast.show({
+                type: 'error',
+                text1: 'Please add product size.'
+            });
+            return;
+        }
+        else if (color == "") {
+            Toast.show({
+                type: 'error',
+                text1: 'Please add product color.'
+            });
+            return;
+        }
+        else if (description == "") {
+            Toast.show({
+                type: 'error',
+                text1: 'Please add product description.'
+            });
+            return;
+        }
+        else if (productImage == null) {
+            Toast.show({
+                type: 'error',
+                text1: 'Please add product price.'
+            });
+            return;
+        }
+
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", productImage, true);
+            xhr.send(null);
+        });
+
+        const fileRef = ref(getStorage(), uuid.v4());
+        const result = await uploadBytes(fileRef, blob);
+
+        // We're done with the blob, close and release it
+        blob.close();
+
+        var downloadUrl = await getDownloadURL(fileRef);
+
+
+        const docRef = await addDoc(collection(db, "Products"), {
+            productName: productName,
+            price: price,
+            category: category,
+            size: size.split(","),
+            color: color.split(","),
+            description: description,
+            productImage: downloadUrl
+        })
+    }
+
     return (
         <KeyboardAwareScrollView
         style={{
@@ -15,7 +143,7 @@ export default function AddProduct() {
         <View
             style={{
                 flex: 1,
-                height: hp(150)
+                marginTop: Platform.OS == "ios" ? hp(5) : 0
             }}
         >
             <Text style={styles.header}>
@@ -51,9 +179,12 @@ export default function AddProduct() {
                 inputStyle={{
                     color: "#686c6e"
                 }}
+                onChangeText={(text) => {
+                    setProductName(text);
+                }}
             />
             <Input
-                placeholder="$1,190"
+                placeholder="1190"
                 autoCapitalize={"none"}
                 label={"Price"}
 
@@ -64,6 +195,7 @@ export default function AddProduct() {
                     fontWeight: "500",
                     color: "black"
                 }}
+                keyboardType="numeric"
 
                 style={{
                     marginLeft: hp(1.5),
@@ -82,13 +214,13 @@ export default function AddProduct() {
                 inputStyle={{
                     color: "#686c6e"
                 }}
-
+                onChangeText={(text) => {
+                    setPrice(text);
+                }}
             />
             <Input
                 placeholder="Shoes"
-                autoCapitalize={"none"}
                 label={"Category"}
-                secureTextEntry={true}
                 labelStyle={{
                     marginLeft: hp(1),
                     marginBottom: hp(1),
@@ -112,12 +244,14 @@ export default function AddProduct() {
                 inputStyle={{
                     color: "#686c6e"
                 }}
+                onChangeText={(text) => {
+                    setCategory(text);
+                }}
             />
             <Input
-                placeholder="XL"
+                placeholder="XL, S, XS"
                 autoCapitalize={"none"}
                 label={"Size Options"}
-                secureTextEntry={true}
                 labelStyle={{
                     marginLeft: hp(1),
                     marginBottom: hp(1),
@@ -141,9 +275,12 @@ export default function AddProduct() {
                 inputStyle={{
                     color: "#686c6e"
                 }}
+                onChangeText={(text) => {
+                    setSize(text);
+                }}
             />
             <Input
-                placeholder="Black"
+                placeholder="Black, Red"
                 label={"Color Options"}
                 labelStyle={{
                     marginLeft: hp(1),
@@ -169,12 +306,14 @@ export default function AddProduct() {
                 inputStyle={{
                     color: "#686c6e"
                 }}
+                onChangeText={(text) => {
+                    setColor(text);
+                }}
             />
             <Input
                 placeholder=""
                 autoCapitalize={"none"}
                 label={"Description"}
-                secureTextEntry={true}
                 labelStyle={{
                     marginLeft: hp(1),
                     marginBottom: hp(1),
@@ -198,6 +337,9 @@ export default function AddProduct() {
                 inputStyle={{
                     color: "#686c6e"
                 }}
+                onChangeText={(text) => {
+                    setDescription(text);
+                }}
             />
             <Text
                 style={{
@@ -211,91 +353,59 @@ export default function AddProduct() {
                 Product Image
             </Text>
             
-            <View>
-            <ScrollView
-                            horizontal={true}
-                        >
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(18),
-                                        width: hp(18),
-                                        marginLeft: hp(2)
-                                    }}
-                                    source={{
-                                        uri: "https://images.squarespace-cdn.com/content/v1/56d8ea50c6fc08deaeee5c79/1548930275441-OY0ZBD2I02VSKTIKF506/K052_GLOSS_AUBERGINE_02.jpg?format=2500w://www.prada.com/content/dam/pradabkg_products/2/2EG/2EG421/055F0807/2EG421_055_F0807_SLS.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(4)
-                                    }}
-                                >
-                                    Formal Men's Shoes
-                                </Text>
-                            </View>
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(18),
-                                        width: hp(18),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://bspokestyle.com/cdn/shop/products/010411_2_echo-lo-ii_white-and-navy_sneakers_magnanni_p45.jpg?v=1590604783&width=1080"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(4)
-                                    }}
-                                >
-                                    Sneakers
-                                </Text>
-                            </View>
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(18),
-                                        width: hp(18),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://static-sg.zacdn.com/p/coach-1463-4869382-1.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(4)
-                                    }}
-                                >
-                                    Coach
-                                </Text>
-                            </View>
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(18),
-                                        width: hp(18),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://slimages.macysassets.com/is/image/MCY/products/9/optimized/23749119_fpx.tif?$browse$&wid=178&fmt=jpeg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(4)
-                                    }}
-                                >
-                                    Calvin Klein Shoes
-                                </Text>
-                            </View>
-                        </ScrollView>
+            <TouchableOpacity
+                style={{
+                    borderRadius: hp(5),
+                    width: wp(80),
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    marginTop: hp(2),
+                    backgroundColor: 'black',
+                    padding: hp(2)
+                }}
+                onPress={() => {
+                    pickImage();
+                }}
+            >
+                <Text
+                    style={{
+                        textAlign: 'center',
+                        color: 'white',
+                        fontSize: hp(2),
+                        fontWeight: 'bold'
+                    }}
+                >
+                    {
+                        productImage ?
+                        "Change Product Image"
+                        :
+                        "Add Product Image"
+                    }
+                </Text>
+            </TouchableOpacity>
+            <View
+                style={{
+                    padding: hp(2)
+                }}
+            >
+                {
+                    productImage &&
+                    <Image 
+                        source={{
+                            uri: productImage
+                        }}
+                        style={{
+                            width: '100%',
+                            height: hp(30),
+                            marginVertical: hp(2),
+                            borderRadius: hp(2)
+                        }}
+                        resizeMode={"cover"}
+                    />
+                }
             </View>
             <View
                 style={{
-                    flex: 1,
                     marginTop: hp(2)
                 }}
             >
@@ -311,11 +421,14 @@ export default function AddProduct() {
                         }}
                         containerStyle={{
                             borderRadius: hp(5),
-                            width: hp(48),
-                            marginLeft: hp(2),
+                            width: wp(80),
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
                             marginTop: hp(2)
                         }}
-
+                        onPress={() => {
+                            addProduct();
+                        }}
                     />
                     <Button
                         title="Cancel"
@@ -329,8 +442,9 @@ export default function AddProduct() {
                         }}
                         containerStyle={{
                             borderRadius: hp(5),
-                            width: hp(48),
-                            marginLeft: hp(2),
+                            width: wp(80),
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
                             marginTop: hp(1)
                         }}
 
