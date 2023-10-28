@@ -32,6 +32,8 @@ export default function Register(props) {
     const [passwordError, setPasswordError] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('')
+    const [companyLogo, setCompanyLogo] = useState('');
+    const [user, setUser] = useState("company");
     const [loading, setLoading] = useState(false);
 
     const register = () => {
@@ -113,9 +115,54 @@ export default function Register(props) {
                 >
                     Register
                 </Text>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                        marginBottom: hp(3)
+                    }}
+                >
+                    <Button
+                        title="User"
+                        titleStyle={{
+                            color: "black"
+                        }}
+                        buttonStyle={{
+                            backgroundColor: '#686c6e',
+                            borderRadius: hp(2)
+                        }}
+                        containerStyle={{
+                            width: hp(15),
+                        }}
+                        onPress={() => {
+                            setUser("user");
+                        }}
+                    />
+                    <Button
+                        title="Company"
+                        titleStyle={{
+                            color: "black"
+                        }}
+                        buttonStyle={{
+                            backgroundColor: '#686c6e',
+                            borderRadius: hp(2)
+                        }}
+                        containerStyle={{
+                            width: hp(15),
+
+                        }}
+                        onPress={() => {
+                            setUser("company");
+                        }}
+                    />
+                </View>
                 <Input
-                    placeholder="John Appleseed"
-                    label={"Name"}
+                    placeholder={
+                        (user == "user") ? "Johnny Appleseed" : "Musinsa"
+                    }
+                    label={
+                        (user == "user") ? "Name" : "Company Name"
+                    }
                     errorMessage={nameError}
                     labelStyle={{
                         marginLeft: hp(1),
@@ -148,6 +195,43 @@ export default function Register(props) {
                         setNameError('');
                     }}
                 />
+                {
+                    user == "company" ?
+                        <Input
+                            placeholder="abc@email.com"
+                            autoCapitalize={"none"}
+                            label={"Company Logo"}
+                            errorMessage={emailError}
+
+                            labelStyle={{
+                                marginLeft: hp(1),
+                                marginBottom: hp(1),
+                                fontWeight: "500",
+                                color: "#494d4e"
+                            }}
+
+                            style={{
+                                marginLeft: hp(1.5),
+                                fontWeight: "600"
+                            }}
+
+                            inputContainerStyle={{
+                                borderWidth: hp(0.2),
+                                borderRadius: hp(0.85),
+                                borderBottomWidth: hp(0.2),
+                                borderColor: "white",
+                                marginLeft: hp(1),
+                                height: hp(6),
+                                width: hp(42)
+                            }}
+                            inputStyle={{
+                                color: "#686c6e"
+                            }}
+                            onChangeText={(text) => {
+                                setCompanyLogo(text);
+                            }}
+                        /> : null
+                }
                 <Input
                     placeholder="abc@email.com"
                     autoCapitalize={"none"}

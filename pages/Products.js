@@ -1,59 +1,68 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { Button } from '@rneui/themed';
+import { initializeApp } from "firebase/app";
+import { getFirestore } from 'firebase/firestore';
+import { collection, getDocs } from "firebase/firestore";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
+    authDomain: "meta-fc205.firebaseapp.com",
+    projectId: "meta-fc205",
+    storageBucket: "meta-fc205.appspot.com",
+    messagingSenderId: "313671883891",
+    appId: "1:313671883891:web:3ecf94acf648ee9ba85e06",
+    measurementId: "G-953P5N046G"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 
 export default function Products() {
-    const [products, setProducts] = useState([
-        {
-            url: "https://m.media-amazon.com/images/I/61fOR8yqOmL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "INDIE",
-            company: "xcvb",
-            price: 9584
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/61HunMUy6BL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "FUNK",
-            company: "hjkl",
-            price: 2342
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/714XSiO1mtL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "POP",
-            company: "ghjk",
-            price: 4859
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/51znawVkEIL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "CLASSIC",
-            company: "asdfg",
-            price: 3029
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/71QNbYasFjL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "MOZART",
-            company: "tyuio",
-            price: 23423
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/61JOHamx0jL._AC_UX679_.jpg",
-            name: "VOLTAIRE",
-            company: "qwerty",
-            price: 1132
-        },
-    ]);
+    const [products, setProducts] = useState([]);
     const [showNum, setShowNum] = useState(2);
+    const [category, setCategory] = useState("shirt");
 
-    function chunk (arr, len) {
+    function chunk(arr, len) {
         var chunks = [],
             i = 0,
             n = arr.length;
-      
+
         while (i < n) {
-          chunks.push(arr.slice(i, i += len));
+            chunks.push(arr.slice(i, i += len));
         }
-      
+
         return chunks;
     }
+
+
+    useEffect(() => {
+        const getDatabase = async () => {
+            const querySnapshot = await getDocs(collection(db, "Products"));
+            var tempArray = []
+            querySnapshot.forEach((doc) => {
+                var data = doc.data()
+                if (data["category"] != category) {
+                    return;
+                }
+                tempArray.push({
+                    "category": data["category"],
+                    "color": data["description"],
+                    "description": data["description"],
+                    "price": data["price"],
+                    "productImage": data["productImage"],
+                    "productName": data["productName"],
+                    "size": data["size"]
+                })
+            });
+            setProducts(tempArray)
+        }
+
+        getDatabase();
+    }, [])
 
     return (
         <View
@@ -124,7 +133,7 @@ export default function Products() {
                                 <View
                                     style={{
                                         flexDirection: 'row',
-                                        marginBottom: hp(4),
+                                        marginBottom: hp(6),
                                         justifyContent: 'space-around'
                                     }}
                                 >
@@ -135,27 +144,19 @@ export default function Products() {
                                                     style={{
                                                         height: hp(20),
                                                         width: hp(20),
-                                                        marginBottom: hp(1),
+                                                        marginBottom: hp(1.5),
                                                         marginLeft: hp(1)
                                                     }}
                                                     source={{
-                                                        uri: el2["url"]
+                                                        uri: el2["productImage"]
                                                     }}
                                                 />
-                                                <Text
-                                                    style={{
-                                                        fontWeight: "600",
-                                                        marginLeft: hp(2),
-                                                    }}
-                                                >
-                                                    {el2["name"]}
-                                                </Text>
                                                 <Text
                                                     style={{
                                                         marginLeft: hp(2)
                                                     }}
                                                 >
-                                                    {el2["company"]}
+                                                    {el2["description"]}
                                                 </Text>
                                                 <Text
                                                     style={{
@@ -166,39 +167,33 @@ export default function Products() {
                                                 >
                                                     ${el2["price"]}
                                                 </Text>
-                                                
+
                                             </View>
                                         ))
                                     }
-                                </View>  
+                                </View>
                             ))
                         }
                     </View>
-
-                    <Text
-                        style={{
-                            alignSelf: "center",
-                            textAlign: "center",
-
-                            width: "92%",
-                            height: hp(5),
-
-                            marginTop: hp(3),
-                            paddingTop: hp(1),
-
-                            fontSize: hp(2),
+                    <Button
+                        title="Explore More ▼"
+                        titleStyle={{
+                            color: "black"
+                        }}
+                        buttonStyle={{
+                            backgroundColor: 'white',
                             borderColor: "black",
                             borderRadius: hp(1),
-                            borderWidth: hp(0.1)
+                            borderWidth: hp(0.1),
+                            height: hp(5.6),
+                            width: "92%",
+                            alignSelf: "center",
+                            textAlign: "center"
                         }}
                         onPress={() => {
                             setShowNum(showNum + 1)
                         }}
-                    >
-                        Explore More ▼
-                    </Text>
-                    <Text></Text>
-                    <Text></Text>
+                    />
                 </View>
             </ScrollView>
         </View>
