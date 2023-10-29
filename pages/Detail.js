@@ -173,62 +173,105 @@ export default function Detail(props) {
                         />
                     </View>
                 </ScrollView>
-            </View>
 
-            
-
-            {/* Bottom thingy */}
-            <View
-                style = {{
-                    height: hp(20),
-                    width: wp(100)
-                }}>
-                <Button
-                    style = {{
-                        paddingTop: hp(5)
-                    }}
-                    containerStyle={{
-                        width: wp(30),
-                        marginLeft: 'auto',
-                        marginRight: 'auto'
-                    }}
-                    onPress={() => {
-                        setoptions1Pressed(!options1Pressed)
-                    }}
-                    >
-                        options
-                </Button>
-            </View>
-            <View>
                 {
                     checkoutPressed ?
-                    <View
-                        style={{
-                            borderTopColor: '#F1EFEF',
-                            borderTopWidth: 2,
-                            padding: hp(2),
-                            flexDirection: 'row'}}>
-                        
-                        
+                    <View>
 
-                        <Button
-                            style={{
-                                width:hp(20)
-                            }}
-                            buttonStyle={{
-                                backgroundColor: "#1A1A1A",
-                                borderRadius: hp(1),
-                                height: hp(7)
-                            }}
-                            titleStyle={{
-                                fontWeight: 'bold',
-                                color: 'white'
-                            }}
-                        >
+                        {/* Bottom thingy */}
+                        <View
+                            style = {{
+                                height: hp(15),
+                                width: wp(100),
+                                marginTop: hp(2),
+                                backgroundColor: "black",
+                                paddingRight: wp(60),
+                                flexDirection: "column"
+                            }}>
+                            
+                            {
+                                !options1Pressed ?
+                                <Button
+                                style = {{
+                                    paddingTop: hp(5)
+                                }}
+                                containerStyle={{
+                                    width: wp(30),
+                                    marginLeft: 'auto',
+                                    marginRight: 'auto'
+                                }}
+                                onPress={() => {
+                                    setoptions1Pressed(!options1Pressed)
+                                }}
+                                >
+                                </Button>
+                                :
+                                    options1Pressed ?
+                                    <View>
+                                        <Input>
+                                            {Address}
+                                        </Input>
+                                    </View>
 
-                            Checkout
-                        </Button>
+                                    :
+                                    <View></View>
+                            }
+                            
+                            
+                            <Button
+                                style = {{
+                                    paddingTop: hp(5)
+                                }}
+                                containerStyle={{
+                                    width: wp(30),
+                                    marginLeft: 'auto',
+                                    marginRight: 'auto'
+                                }}>
+                                Size
+                            </Button>
+                        </View>
+
+                        <View
+                            style = {{
+                                marginTop: hp(10),
+                                borderTopColor: '#F1EFEF',
+                                borderTopWidth: 2,
+                                padding: hp(2),
+                                flexDirection: 'row'}}>
+                            <Button
+                                style={{
+                                    width:hp(20)
+                                }}
+                                buttonStyle={{
+                                    backgroundColor: "#1A1A1A",
+                                    borderRadius: hp(1),
+                                    height: hp(7)
+                                }}
+                                titleStyle={{
+                                    fontWeight: 'bold',
+                                    color: 'white'
+                                }}
+                            >
+
+                                Checkout
+                            </Button>
+
+                            <Button
+                                style = {{
+                                    width: hp(20)
+                                }}
+                                buttonStyle={{
+                                    backgroundColor: "black",
+                                    borderRadius: hp(1),
+                                    height: hp(7)
+                                }}>
+                                Add To Cart
+                            </Button>
+                        </View>
+
+                        
                     </View>
+
 
                     :
                 
@@ -279,6 +322,8 @@ export default function Detail(props) {
 
                 </View>
                 }
+
+                
             </View>
 
             {/* Bottom Thingy 2 */}
