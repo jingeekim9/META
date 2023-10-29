@@ -352,21 +352,20 @@ const styles = StyleSheet.create({
         backgroundColor : "white",
         color : "black",
         textAlign : "center",
-        paddingVertical : 10,
-        marginBottom : 1,
-        marginTop: 12,
-        fontSize: 30,
-        fontWeight: "400",
-        height: 55
+        paddingVertical : 13,
+        marginTop: 15,
+        fontSize: 25,
+        fontWeight: "500",
+        height: 55,
   },
     headerr: {
     backgroundColor : "#f2ead5",
     color : "black",
     textAlign : "center",
-    paddingVertical : 7,
+    paddingVertical : 6,
     marginBottom : 10,
     fontSize: 13,
     fontWeight: "500",
-    height: 35
+    height: 30
     }
 });
