@@ -9,12 +9,25 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon, AirbnbRating } from '@rneui/themed';
 import { Image } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 
 export default function Detail(props) {
     const [heartPressed, setHeartPress] = useState(false);
     const [checkoutPressed, setcheckoutPressed] = useState(false);
     const [options1Pressed, setoptions1Pressed] = useState(false);
     const [options2Pressed, setoptions2Pressed] = useState(false);
+    const [colorOpen, setColorOpen] = useState(false);
+    const [colorOptions, setColorOptions] = useState([
+        {label: "Red", value: "red"},
+        {label: "Black", value: "black"}
+    ])
+    const [size, setSize] = useState("");
+    const [sizeOpen, setSizeOpen] = useState(false);
+    const [sizeOptions, setSizeOptions] = useState([
+        {label: "L", value: "L"},
+        {label: "M", value: "M"}
+    ])
+    const [color, setColor] = useState("");
     return (
         <SafeAreaView
             style={{
@@ -173,62 +186,122 @@ export default function Detail(props) {
                         />
                     </View>
                 </ScrollView>
-            </View>
 
-            
-
-            {/* Bottom thingy */}
-            <View
-                style = {{
-                    height: hp(20),
-                    width: wp(100)
-                }}>
-                <Button
-                    style = {{
-                        paddingTop: hp(5)
-                    }}
-                    containerStyle={{
-                        width: wp(30),
-                        marginLeft: 'auto',
-                        marginRight: 'auto'
-                    }}
-                    onPress={() => {
-                        setoptions1Pressed(!options1Pressed)
-                    }}
-                    >
-                        options
-                </Button>
-            </View>
-            <View>
                 {
                     checkoutPressed ?
-                    <View
-                        style={{
-                            borderTopColor: '#F1EFEF',
-                            borderTopWidth: 2,
-                            padding: hp(2),
-                            flexDirection: 'row'}}>
-                        
-                        
+                    <View>
 
-                        <Button
-                            style={{
-                                width:hp(20)
-                            }}
-                            buttonStyle={{
-                                backgroundColor: "#1A1A1A",
-                                borderRadius: hp(1),
-                                height: hp(7)
-                            }}
-                            titleStyle={{
-                                fontWeight: 'bold',
-                                color: 'white'
-                            }}
-                        >
+                        {/* Bottom thingy */}
+                        <View
+                            style = {{
+                                width: wp(100),
+                                flexDirection: "column",
+                                padding: hp(2),
+                            }}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        marginBottom: hp(2)
+                                    }}
+                                >
+                                    <Icon 
+                                        type="ionicon"
+                                        name="close-outline"
+                                        size={hp(4)}
+                                        onPress={() => {
+                                            setcheckoutPressed(!checkoutPressed);
+                                            setSize("");
+                                            setColor("");
+                                        }}
+                                    />
+                                    <Text
+                                        style={{
+                                            fontSize: hp(2.5),
+                                            fontWeight: 'bold',
+                                            marginLeft: hp(2)
+                                        }}
+                                    >
+                                        Product Name
+                                    </Text>
+                                </View>
+                                <DropDownPicker 
+                                    open={colorOpen}
+                                    value={color}
+                                    items={colorOptions}
+                                    setOpen={setColorOpen}
+                                    setValue={setColor}
+                                    setItems={setColorOptions}
+                                    placeholder="Color"
+                                    containerStyle={{
+                                        marginBottom: hp(2)
+                                    }}
+                                    dropDownDirection="TOP"
+                                />
+                                <DropDownPicker 
+                                    open={sizeOpen}
+                                    value={size}
+                                    items={sizeOptions}
+                                    setOpen={setSizeOpen}
+                                    setValue={setSize}
+                                    setItems={setSizeOptions}
+                                    placeholder="Size"
+                                    containerStyle={{}}
+                                    dropDownDirection="TOP"
+                                />
+                                <View
+                                    style={{
+                                        marginTop: hp(2)
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            fontSize: hp(2.3),
+                                            textAlign: 'right'
+                                        }}
+                                    >
+                                        Total Price: {" "}
+                                        {
+                                            (size && color) ?
+                                            <Text style={{fontWeight: 'bold'}}>$2,000</Text>
+                                            :
+                                            <Text style={{fontWeight: 'bold'}}>$0</Text>
+                                        }
+                                        
+                                    </Text>
+                                </View>
+                        </View>
 
-                            Checkout
-                        </Button>
+                        <View
+                            style = {{
+                                borderTopColor: '#F1EFEF',
+                                borderTopWidth: 2,
+                                padding: hp(2),
+                                flexDirection: 'row',
+                                justifyContent: 'center'
+                                }}>
+                            <Button
+                                style={{
+                                    width: wp(90),
+                                }}
+                                buttonStyle={{
+                                    backgroundColor: "#1A1A1A",
+                                    borderRadius: hp(1),
+                                    height: hp(7)
+                                }}
+                                titleStyle={{
+                                    fontWeight: 'bold',
+                                    color: 'white'
+                                }}
+                            >
+
+                                Checkout
+                            </Button>
+                        </View>
+
+                        
                     </View>
+
 
                     :
                 
@@ -244,7 +317,7 @@ export default function Detail(props) {
                         
                     <Button
                         style={{
-                            width: hp(35)
+                            width: wp(75)
                         }}
                         buttonStyle={{
                             backgroundColor: "#1A1A1A",
@@ -260,7 +333,7 @@ export default function Detail(props) {
                         }}
                     >
 
-                        Checkout
+                        Choose Options
                     </Button>
                     <View>
                         <Icon
@@ -279,6 +352,8 @@ export default function Detail(props) {
 
                 </View>
                 }
+
+                
             </View>
 
             {/* Bottom Thingy 2 */}
