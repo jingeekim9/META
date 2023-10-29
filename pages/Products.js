@@ -5,6 +5,7 @@ import { Button } from '@rneui/themed';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { collection, getDocs } from "firebase/firestore";
+import Toast from "react-native-toast-message";
 
 
 const firebaseConfig = {
@@ -180,6 +181,9 @@ export default function Products() {
                         titleStyle={{
                             color: "black"
                         }}
+                        containerStyle={{
+                            marginBottom: hp(10)
+                        }}
                         buttonStyle={{
                             backgroundColor: 'white',
                             borderColor: "black",
@@ -191,6 +195,14 @@ export default function Products() {
                             textAlign: "center"
                         }}
                         onPress={() => {
+                            if(showNum > products.length)
+                            {
+                                Toast.show({
+                                    type: 'error',
+                                    text1: 'No more products to show.'
+                                });
+                                return;
+                            }
                             setShowNum(showNum + 1)
                         }}
                     />

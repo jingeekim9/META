@@ -9,6 +9,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, } from "firebase/auth";
 import { collection, doc, addDoc, getFirestore } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import uuid from "uuid";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -59,13 +60,25 @@ export default function Register(props) {
             setConfirmPasswordError("Please input the same password")
             setLoading(false);
         }
+        else if(user == "company" && companyLogo == null)
+        {
+            setCompanyLogoError("Please choose a company logo");
+            setLoading(false);
+        }
         else {
             createUserWithEmailAndPassword(auth, email, password) // if this code runs successfully
                 .then((userCredential) => {
                     setLoading(false);
                     const user = userCredential.user;
 
-                    addData();
+                    if(user == "user")
+                    {
+                        addData();
+                    }
+                    else
+                    {
+                        addCompany();
+                    }
 
                     props.navigation.reset({
                         index: 0,
@@ -89,16 +102,52 @@ export default function Register(props) {
     const addData = async () => {
         const docRef = await addDoc(collection(db, "Users"), {
             email: email,
-            name: name
+            name: name,
+            type: user
         });
         console.log("Document written with ID: ", docRef.id);
     }
 
     const addCompany = async() => {
-        
+
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", companyLogo, true);
+            xhr.send(null);
+        });
+
+        console.log("Working")
+
+        const fileRef = ref(getStorage(), uuid.v4());
+        const result = await uploadBytes(fileRef, blob);
+
+        console.log("Working2")
+        // We're done with the blob, close and release it
+        blob.close();
+
+        var downloadUrl = await getDownloadURL(fileRef);
+
+        console.log("Working3")
+
+        const docRef = await addDoc(collection(db, "Users"), {
+            email: email,
+            name: name,
+            type: user,
+            companyLogo: downloadUrl
+        });
+        console.log("Document written with ID: ", docRef.id);
     }
 
     const pickImage = async () => {
+        setCompanyLogoError("");
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
@@ -150,7 +199,7 @@ export default function Register(props) {
                             fontWeight:"bold"
                         }}
                         buttonStyle={{
-                            backgroundColor: '#686c6e',
+                            backgroundColor: user == "user" ? "#2d3133" : '#686c6e',
                             borderRadius: hp(2)
                         }}
                         containerStyle={{
@@ -167,7 +216,7 @@ export default function Register(props) {
                             fontWeight:"bold"
                         }}
                         buttonStyle={{
-                            backgroundColor: '#686c6e',
+                            backgroundColor: user == "company" ? "#2d3133" : '#686c6e',
                             borderRadius: hp(2)
                         }}
                         containerStyle={{
@@ -328,6 +377,19 @@ export default function Register(props) {
                     }}
                 />
                 {
+                    companyLogoError && 
+                    <Text
+                        style={{
+                            color: 'red',
+                            fontSize: hp(1.7),
+                            paddingHorizontal: hp(2),
+                            marginBottom: hp(2)
+                        }}
+                    >
+                        {companyLogoError}
+                    </Text>
+                }
+                {
                     user == "company" ?
                         <TouchableOpacity
                             style={{
@@ -367,9 +429,11 @@ export default function Register(props) {
                             uri: companyLogo
                         }}
                         style={{
-                            width: '100%',
+                            width: wp(80),
                             height: hp(20),
                             marginVertical: hp(2),
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
                             borderRadius: hp(2)
                         }}
                         resizeMode={"cover"}
@@ -399,7 +463,7 @@ export default function Register(props) {
                         }}
                         loading={loading}
                         onPress={() => {
-                            user=="user" ? register() : addCompany()
+                            register();
                         }}
                     />
                 </View>
