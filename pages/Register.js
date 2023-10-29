@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TextInput } from "react-native";
+import { View, Text, Image } from "react-native";
 import { Input, Button } from '@rneui/themed';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import * as ImagePicker from "expo-image-picker";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, } from "firebase/auth";
 import { collection, doc, addDoc, getFirestore } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -32,6 +35,9 @@ export default function Register(props) {
     const [passwordError, setPasswordError] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('')
+    const [companyLogo, setCompanyLogo] = useState(null);
+    const [companyLogoError, setCompanyLogoError] = useState('')
+    const [user, setUser] = useState("user");
     const [loading, setLoading] = useState(false);
 
     const register = () => {
@@ -88,6 +94,24 @@ export default function Register(props) {
         console.log("Document written with ID: ", docRef.id);
     }
 
+    const addCompany = async() => {
+        
+    }
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+            exif: true
+        });
+
+        if (!result.canceled) {
+            setCompanyLogo(result.assets[0].uri)
+        }
+    }
+
     return (
         <KeyboardAwareScrollView
             style={{
@@ -97,8 +121,7 @@ export default function Register(props) {
         >
             <View
                 style={{
-                    flex: 1,
-                    height: hp(100)
+                    flex: 1
                 }}
             >
                 <Text
@@ -113,9 +136,56 @@ export default function Register(props) {
                 >
                     Register
                 </Text>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                        marginBottom: hp(3)
+                    }}
+                >
+                    <Button
+                        title="User"
+                        titleStyle={{
+                            color: "white",
+                            fontWeight:"bold"
+                        }}
+                        buttonStyle={{
+                            backgroundColor: '#686c6e',
+                            borderRadius: hp(2)
+                        }}
+                        containerStyle={{
+                            width: hp(18),
+                        }}
+                        onPress={() => {
+                            setUser("user");
+                        }}
+                    />
+                    <Button
+                        title="Company"
+                        titleStyle={{
+                            color: "white",
+                            fontWeight:"bold"
+                        }}
+                        buttonStyle={{
+                            backgroundColor: '#686c6e',
+                            borderRadius: hp(2)
+                        }}
+                        containerStyle={{
+                            width: hp(18),
+
+                        }}
+                        onPress={() => {
+                            setUser("company");
+                        }}
+                    />
+                </View>
                 <Input
-                    placeholder="John Appleseed"
-                    label={"Name"}
+                    placeholder={
+                        (user == "user") ? "Johnny Appleseed" : "Musinsa"
+                    }
+                    label={
+                        (user == "user") ? "Name" : "Company Name"
+                    }
                     errorMessage={nameError}
                     labelStyle={{
                         marginLeft: hp(1),
@@ -257,6 +327,55 @@ export default function Register(props) {
                         setConfirmPasswordError('');
                     }}
                 />
+                {
+                    user == "company" ?
+                        <TouchableOpacity
+                            style={{
+                                borderRadius: hp(2),
+                                width: wp(70),
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                                backgroundColor: '#2d3133',
+                                padding: hp(2)
+                            }}
+                            errorMessage={companyLogoError}
+                            onPress={() => {
+                                pickImage();
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    textAlign: 'center',
+                                    color: 'white',
+                                    fontSize: hp(1.8),
+                                    fontWeight: '600'
+                                }}
+                            >
+                                {
+                                    companyLogo ?
+                                        "Change Company Logo"
+                                        :
+                                        "Add Company Image"
+                                }
+                            </Text>
+                        </TouchableOpacity> : null
+                }
+                {
+                    user=="company" && companyLogo &&
+                    <Image
+                        source={{
+                            uri: companyLogo
+                        }}
+                        style={{
+                            width: '100%',
+                            height: hp(20),
+                            marginVertical: hp(2),
+                            borderRadius: hp(2)
+                        }}
+                        resizeMode={"cover"}
+                    />
+                }
+                
                 <View
                     style={{
                         flex: 1,
@@ -280,7 +399,7 @@ export default function Register(props) {
                         }}
                         loading={loading}
                         onPress={() => {
-                            register();
+                            user=="user" ? register() : addCompany()
                         }}
                     />
                 </View>
