@@ -10,6 +10,7 @@ import { initializeApp } from "firebase/app";
 import { collection, doc, addDoc, getFirestore } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -25,7 +26,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export default function AddProduct() {
+export default function AddProduct(props) {
     const [productImage, setProductImage] = useState(null); 
     const [productName, setProductName] = useState("");
     const [price, setPrice] = useState(0);
@@ -33,6 +34,7 @@ export default function AddProduct() {
     const [size, setSize] = useState("");
     const [color, setColor] = useState("");
     const [description, setDescription] = useState("");
+    const [loading, setLoading] = useState("");
 
     const pickImage = async() => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -49,11 +51,13 @@ export default function AddProduct() {
     }
 
     const addProduct = async() => {
+        setLoading(true);
         if (productName == "") {
             Toast.show({
                 type: 'error',
                 text1: 'Please add product name.'
             });
+            setLoading(false);
             return;
         }
         else if (price == "") {
@@ -61,6 +65,7 @@ export default function AddProduct() {
                 type: 'error',
                 text1: 'Please add product price.'
             });
+            setLoading(false);
             return;
         }
         else if (category == "") {
@@ -68,6 +73,7 @@ export default function AddProduct() {
                 type: 'error',
                 text1: 'Please add product category.'
             });
+            setLoading(false);
             return;
         }
         else if (size == "") {
@@ -75,6 +81,7 @@ export default function AddProduct() {
                 type: 'error',
                 text1: 'Please add product size.'
             });
+            setLoading(false);
             return;
         }
         else if (color == "") {
@@ -82,6 +89,7 @@ export default function AddProduct() {
                 type: 'error',
                 text1: 'Please add product color.'
             });
+            setLoading(false);
             return;
         }
         else if (description == "") {
@@ -89,6 +97,7 @@ export default function AddProduct() {
                 type: 'error',
                 text1: 'Please add product description.'
             });
+            setLoading(false);
             return;
         }
         else if (productImage == null) {
@@ -96,6 +105,7 @@ export default function AddProduct() {
                 type: 'error',
                 text1: 'Please add product price.'
             });
+            setLoading(false);
             return;
         }
 
@@ -121,6 +131,8 @@ export default function AddProduct() {
 
         var downloadUrl = await getDownloadURL(fileRef);
 
+        var name = await AsyncStorage.getItem("name");
+
 
         const docRef = await addDoc(collection(db, "Products"), {
             productName: productName,
@@ -129,8 +141,11 @@ export default function AddProduct() {
             size: size.split(","),
             color: color.split(","),
             description: description,
-            productImage: downloadUrl
-        })
+            productImage: downloadUrl,
+            companyName: name
+        });
+        setLoading(false);
+        props.navigation.replace("ViewProduct")
     }
 
     return (
@@ -415,6 +430,7 @@ export default function AddProduct() {
                             color: "white",
                             fontWeight: "500"
                         }}
+                        loading={loading}
                         buttonStyle={{
                             backgroundColor: "black",
                             paddingVertical: hp(1.5)
