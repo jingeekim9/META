@@ -1,18 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, Platform, ScrollView } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Input, Button, color } from '@rneui/base';
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { collection, doc, addDoc, getFirestore, query, where, getDocs } from "firebase/firestore";
+import { collection, doc, addDoc, getFirestore, query, where, getDocs, getDoc } from "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon, AirbnbRating } from '@rneui/themed';
 import { Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 
+const firebaseConfig = {
+    apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
+    authDomain: "meta-fc205.firebaseapp.com",
+    projectId: "meta-fc205",
+    storageBucket: "meta-fc205.appspot.com",
+    messagingSenderId: "313671883891",
+    appId: "1:313671883891:web:3ecf94acf648ee9ba85e06",
+    measurementId: "G-953P5N046G"
+};
+
+// Initialize Firebase in general
+const app = initializeApp(firebaseConfig);
+// Initialize Firebase Firestore
+const db = getFirestore(app);
+
 export default function Detail(props) {
     const [heartPressed, setHeartPress] = useState(false);
+    const [category, setCategory] = useState("");
     const [checkoutPressed, setcheckoutPressed] = useState(false);
     const [options1Pressed, setoptions1Pressed] = useState(false);
     const [options2Pressed, setoptions2Pressed] = useState(false);
@@ -28,6 +43,25 @@ export default function Detail(props) {
         {label: "M", value: "M"}
     ])
     const [color, setColor] = useState("");
+
+    useEffect(() => {
+        const getDetails = async() => {
+            const docRef = doc(db, "Products", "79Fd9IWxIAFZvxTdSz1o");
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                var data = docSnap.data();
+                var category = data["category"];
+                setCategory(category);
+              } else {
+                // docSnap.data() will be undefined in this case
+                console.log("No such document!");
+              }
+        }
+
+        getDetails();
+    }, [])
+
+
     return (
         <SafeAreaView
             style={{
@@ -93,7 +127,7 @@ export default function Detail(props) {
                                     color: '#ababab',
                                     fontWeight: 'bold'
                                 }}>
-                                Category
+                                {category}
                             </Text>
                             <Icon
                                 style={{
