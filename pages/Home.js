@@ -2,12 +2,34 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from '@rneui/themed';
+import { initializeApp } from "firebase/app";
+import { getFirestore } from 'firebase/firestore';
+import { collection, getDocs } from "firebase/firestore";
 import { Icon } from '@rneui/themed';
+import Toast from "react-native-toast-message";
+import Products from "./Products";
 
-export default function Home() {
+const firebaseConfig = {
+    apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
+    authDomain: "meta-fc205.firebaseapp.com",
+    projectId: "meta-fc205",
+    storageBucket: "meta-fc205.appspot.com",
+    messagingSenderId: "313671883891",
+    appId: "1:313671883891:web:3ecf94acf648ee9ba85e06",
+    measurementId: "G-953P5N046G"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+export default function Home(props) {
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
+    const [companies, setCompanies] = useState([])
+    const [showNum, setShowNum] = useState(2)
+    const [topProducts, setTopProducts] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
@@ -18,6 +40,36 @@ export default function Home() {
             setName(name);
         }
         getData();
+    }, [])
+
+    useEffect(() => {
+        const getDatabase = async () => {
+            const querySnapshot = await getDocs(collection(db, "Users"));
+            var tempArray = []
+            querySnapshot.forEach((doc) => {
+                var data = doc.data()
+                if (data["type"] != "company") {
+                    return;
+                }
+                tempArray.push([data["name"], data["companyLogo"]])
+            });
+            setCompanies(tempArray)
+        }
+        const getProducts = async () => {
+            const querySnapshot = await getDocs(collection(db, "Products"));
+            var tempArray = []
+            querySnapshot.forEach((doc) => {
+                var data = doc.data()
+                if (tempArray.length > 5) {
+                    return;
+                }
+                tempArray.push([data["productName"], data["productImage"]])
+            });
+            setTopProducts(tempArray)
+        }
+        
+        getDatabase();
+        getProducts();
     }, [])
 
     return (
@@ -83,6 +135,9 @@ export default function Home() {
                                 name='cart'
                                 type='ionicon'
                                 color='black'
+                                onPress={() => {
+                                    props.navigation.navigate({ name: "Products"});
+                                }}
                             />
                         </View>
                         <View
@@ -114,6 +169,85 @@ export default function Home() {
                     </View>
 
                     {/* ********************************** */}
+
+                    <Text
+                        style={{
+                            fontSize: hp(3),
+                            fontWeight: "500",
+                            marginTop: hp(4),
+                            marginLeft: hp(1),
+                            marginBottom: hp(2)
+                        }}
+                    >
+                        Companies
+                    </Text>
+                    <View>
+                        {
+                            companies.slice(0, showNum).map((el, ind) => (
+                                <View
+                                    style={{
+                                        flexDirection: "row"
+                                    }}
+                                >
+                                    <Image
+                                        style={{
+                                            height: hp(5),
+                                            width: hp(5),
+                                            marginBottom: hp(1.5),
+                                            marginLeft: hp(1),
+                                            borderRadius: hp(2)
+                                        }}
+                                        source={{
+                                            uri: el[1]
+                                        }}
+                                    />
+                                    <Text
+                                        style={{
+                                            marginLeft: hp(2),
+                                            fontWeight: "500",
+                                            marginTop: hp(1.3),
+                                            fontSize: hp(2),
+                                            letterSpacing: hp(0.1)
+                                        }}
+                                    >
+                                        {el[0]}
+                                    </Text>
+
+                                </View>
+                            ))
+                        }
+                    </View>
+                    <Button
+                        title="Explore More ▼"
+                        titleStyle={{
+                            color: "black"
+                        }}
+                        containerStyle={{
+                            marginBottom: hp(5),
+                            marginTop: hp(1.5)
+                        }}
+                        buttonStyle={{
+                            backgroundColor: 'white',
+                            borderColor: "black",
+                            borderRadius: hp(1),
+                            borderWidth: hp(0.1),
+                            height: hp(5.6),
+                            width: "92%",
+                            alignSelf: "center",
+                            textAlign: "center"
+                        }}
+                        onPress={() => {
+                            if(showNum == companies.length){
+                                Toast.show({
+                                    type: 'error',
+                                    text1: 'No more products to show.'
+                                });
+                                return;
+                            }
+                            
+                            setShowNum(showNum + Math.min(3, companies.length-showNum))
+                        }}
+                    />
 
                     <Text
                         style={{
