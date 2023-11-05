@@ -28,6 +28,7 @@ const db = getFirestore(app);
 export default function Detail(props) {
     const [heartPressed, setHeartPress] = useState(false);
     const [category, setCategory] = useState("");
+    const [price, setPrice] = useState("");
     const [checkoutPressed, setcheckoutPressed] = useState(false);
     const [options1Pressed, setoptions1Pressed] = useState(false);
     const [options2Pressed, setoptions2Pressed] = useState(false);
@@ -52,6 +53,9 @@ export default function Detail(props) {
                 var data = docSnap.data();
                 var category = data["category"];
                 setCategory(category);
+                var price = data["price"];
+                let text = price.toLocaleString("en-US", {style:"currency", currency:"KRW"});
+                setPrice(price);
               } else {
                 // docSnap.data() will be undefined in this case
                 console.log("No such document!");
@@ -186,7 +190,8 @@ export default function Detail(props) {
                                     fontSize: hp(2.8),
                                     fontWeight: '500'
                                 }}>
-                                20,000원
+                                {price}
+                                
                             </Text>
                         </View>
                     </View>
