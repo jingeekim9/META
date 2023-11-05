@@ -11,13 +11,15 @@ import Admin from './pages/Admin/Admin';
 import Products from './pages/Products';
 import AddProduct from './pages/Admin/AddProduct';
 import ViewProduct from './pages/Admin/ViewProduct';
+import Profile from './pages/Profile';
+import Checkout from './pages/Checkout';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home'>
+      <Stack.Navigator initialRouteName='Detail'>
         <Stack.Screen
           name="Login"
           component={Login}
@@ -58,6 +60,16 @@ export default function App() {
         <Stack.Screen
           name = "ViewProduct"
           component = {ViewProduct}
+          options = {{headerShown:false}}
+        />
+        <Stack.Screen
+          name = "Profile"
+          component = {Profile}
+          options = {{headerShown:false}}
+        />
+        <Stack.Screen
+          name = "Checkout"
+          component = {Checkout}
           options = {{headerShown:false}}
         />
       </Stack.Navigator>
