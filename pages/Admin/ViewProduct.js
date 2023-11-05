@@ -20,7 +20,7 @@ export default function Home() {
         getData();
     }, [])
 
-
+}
 export default function ViewProducts() {
     const [products, setProducts] = useState([
         {
