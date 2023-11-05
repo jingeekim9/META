@@ -29,9 +29,14 @@ export default function Detail(props) {
     const [heartPressed, setHeartPress] = useState(false);
     const [category, setCategory] = useState("");
     const [price, setPrice] = useState("");
+    const [description, setDescription] = useState("")
+    const [productImage, setproductImage] = useState("")
+    const [productName, setproductName] = useState("");
+    const [companyName, setcompanyName] = useState("");
     const [checkoutPressed, setcheckoutPressed] = useState(false);
     const [options1Pressed, setoptions1Pressed] = useState(false);
     const [options2Pressed, setoptions2Pressed] = useState(false);
+    const [color, setColor] = useState([]);
     const [colorOpen, setColorOpen] = useState(false);
     const [colorOptions, setColorOptions] = useState([
         {label: "Red", value: "red"},
@@ -43,7 +48,6 @@ export default function Detail(props) {
         {label: "L", value: "L"},
         {label: "M", value: "M"}
     ])
-    const [color, setColor] = useState("");
 
     useEffect(() => {
         const getDetails = async() => {
@@ -51,11 +55,51 @@ export default function Detail(props) {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 var data = docSnap.data();
+
+                var colorArray = []
+                var sizeArray = []
+
+                for(var i = 0; i < data['color'].length; i++)
+                {
+                    var colorDict = {
+                        label: data["color"][i],
+                        value: data["color"][i]
+                    }
+                    colorArray.push(colorDict)
+                }
+                setColorOptions(colorArray)
+
+                for(var i = 0; i < data['size'].length; i++)
+                {
+                    var sizeDict = {
+                        label: data["size"][i],
+                        value: data["size"][i]
+                    }
+                    sizeArray.push(sizeDict)
+                }
+                setSizeOptions(sizeArray)
+
+
                 var category = data["category"];
                 setCategory(category);
-                var price = data["price"];
-                let text = price.toLocaleString("en-US", {style:"currency", currency:"KRW"});
-                setPrice(price);
+
+                var price = parseInt(data["price"]);
+                let text = price.toLocaleString("ko-KR", {style:"currency", currency:"KRW"});
+                setPrice(text);
+
+                var description = data["description"];
+                setDescription(description);
+
+                var productImage = data["productImage"];
+                setproductImage(productImage);
+
+                var productName = data["productName"];
+                setproductName(productName);
+
+                var companyName = data["companyName"]
+                setcompanyName(companyName);
+                
+
               } else {
                 // docSnap.data() will be undefined in this case
                 console.log("No such document!");
@@ -95,7 +139,7 @@ export default function Detail(props) {
                         paddingLeft: hp(1),
                         fontWeight: 'bold'
                     }}>
-                    Company Name
+                    {companyName}
                 </Text>
             </View>
             <View
@@ -113,7 +157,9 @@ export default function Detail(props) {
                                 justifyContent: "center",
                                 alignItems: "center"
                             }}
-                            source={require('../assets/tshirt.png')}
+                            source={{
+                                uri: productImage
+                            }}
                             resizeMode="cover"
                         />
 
@@ -158,7 +204,7 @@ export default function Detail(props) {
                                         fontSize: hp(2.5),
                                         fontWeight: 'bold'
                                     }}>
-                                    Black T-Shirt
+                                    {productName}
                                 </Text>
 
                             </View>
@@ -302,7 +348,7 @@ export default function Detail(props) {
                                         Total Price: {" "}
                                         {
                                             (size && color) ?
-                                            <Text style={{fontWeight: 'bold'}}>$2,000</Text>
+                                            <Text style={{fontWeight: 'bold'}}>{price}</Text>
                                             :
                                             <Text style={{fontWeight: 'bold'}}>$0</Text>
                                         }
