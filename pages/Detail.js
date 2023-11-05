@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, Platform, ScrollView } from "react-native";
+import { View, Text, SafeAreaView, Platform, ScrollView, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Input, Button, color } from '@rneui/base';
 import { initializeApp } from "firebase/app";
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon, AirbnbRating } from '@rneui/themed';
 import { Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import Toast from "react-native-toast-message";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -36,7 +37,8 @@ export default function Detail(props) {
     const [checkoutPressed, setcheckoutPressed] = useState(false);
     const [options1Pressed, setoptions1Pressed] = useState(false);
     const [options2Pressed, setoptions2Pressed] = useState(false);
-    const [color, setColor] = useState([]);
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
+    const [color, setColor] = useState("");
     const [colorOpen, setColorOpen] = useState(false);
     const [colorOptions, setColorOptions] = useState([
         {label: "Red", value: "red"},
@@ -108,7 +110,40 @@ export default function Detail(props) {
 
         getDetails();
     }, [])
+    
+    const checkout = async() => {
+        if(color == "")
+        {
+            Toast.show({
+                type: 'error',
+                text1: "Please choose a color."
+            });
+            return;
+        }
+        else if(size == "")
+        {
+            Toast.show({
+                type: 'error',
+                text1: "Please choose a size."
+            });
+            return;
+        }
+        setCheckoutLoading(true);
 
+        const docRef = await addDoc(collection(db, "Checkout"), {
+            productName: productName,
+            price: price,
+            category: category,
+            size: size,
+            color: color,
+            companyName: companyName
+        });
+
+        setCheckoutLoading(false);
+        setcheckoutPressed(false);
+        setColor("");
+        setSize("");
+    }
 
     return (
         <SafeAreaView
@@ -125,14 +160,20 @@ export default function Detail(props) {
                     flexDirection: 'row',
                     alignItems: 'center'
                 }}>
-                <Image
-                    style={{
-                        width: hp(2.5),
-                        height: hp(2.5),
-                        marginLeft: hp(2)
+                <TouchableOpacity
+                    onPress={() => {
+                        props.navigation.navigate("Home")
                     }}
-                    source={require('../assets/left-arrow.png')}
-                />
+                >
+                    <Image
+                        style={{
+                            width: hp(2.5),
+                            height: hp(2.5),
+                            marginLeft: hp(2)
+                        }}
+                        source={require('../assets/left-arrow.png')}
+                    />
+                </TouchableOpacity>
                 <Text
                     style={{
                         fontSize: hp(3),
@@ -240,35 +281,6 @@ export default function Detail(props) {
                                 
                             </Text>
                         </View>
-                    </View>
-
-                    {/* Long Image */}
-                    <View
-                        style = {{
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}>
-                        <Image
-                                style={{
-                                    marginTop: hp(5)
-                            }}
-                            source={require('../assets/guy1.png')}
-
-                        />
-                        <Image
-                                style={{
-                                    marginTop: hp(5)
-                            }}
-                            source={require('../assets/guy2.png')}
-
-                        />
-                        <Image
-                                style={{
-                                    marginTop: hp(5)
-                            }}
-                            source={require('../assets/guy3.png')}
-
-                        />
                     </View>
                 </ScrollView>
 
@@ -378,6 +390,10 @@ export default function Detail(props) {
                                     fontWeight: 'bold',
                                     color: 'white'
                                 }}
+                                onPress={() => {
+                                    checkout();
+                                }}
+                                loading={checkoutLoading}
                             >
 
                                 Checkout

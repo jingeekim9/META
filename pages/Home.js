@@ -80,17 +80,42 @@ export default function Home(props) {
                 backgroundColor: "white"
             }}
         >
-            <Text
+            <View
                 style={{
-                    textAlign: "center",
-                    fontSize: hp(3),
-                    letterSpacing: hp(0.2),
                     marginTop: hp(7),
-                    marginBottom: hp(2)
+                    marginBottom: hp(2),
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: wp(100),
+                    paddingHorizontal: hp(2)
                 }}
             >
-                TITLE
-            </Text>
+                <View
+                    style={{
+                        width: hp(4)
+                    }}
+                >
+
+                </View>
+                <Text
+                    style={{
+                        textAlign: "center",
+                        fontSize: hp(3),
+                        letterSpacing: hp(0.2)
+                    }}
+                >
+                    UPPURPLE
+                </Text>
+                <Icon 
+                    type="ionicon"
+                    name="person-circle-outline"
+                    size={hp(4)}
+                    onPress={() => {
+                        props.navigation.navigate("Profile")
+                    }}
+                />
+            </View>
             <ScrollView>
                 <View>
                     <Image
