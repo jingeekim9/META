@@ -23,13 +23,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export default function Home(props) {
+export default function Home({ props, navigation }) {
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [companies, setCompanies] = useState([])
     const [showNum, setShowNum] = useState(2)
-    const [topProducts, setTopProducts] = useState([]);
+    const [recentProducts, setRecentProducts] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
@@ -60,14 +60,14 @@ export default function Home(props) {
             var tempArray = []
             querySnapshot.forEach((doc) => {
                 var data = doc.data()
-                if (tempArray.length > 5) {
-                    return;
-                }
-                tempArray.push([data["productName"], data["productImage"]])
+                tempArray.push([data["dateAdded"]["seconds"], data["productName"], data["productImage"]])
             });
-            setTopProducts(tempArray)
+            var sortedArray = tempArray.sort((a, b) => {
+                return b[0] - a[0];
+            });
+            setRecentProducts(sortedArray)
         }
-        
+
         getDatabase();
         getProducts();
     }, [])
@@ -136,7 +136,10 @@ export default function Home(props) {
                                 type='ionicon'
                                 color='black'
                                 onPress={() => {
-                                    props.navigation.navigate({ name: "Products"});
+                                    navigation.navigate('Products', {
+                                        otherParam: "UPPURPLE",
+                                        display: "https://s3.eu-west-2.amazonaws.com/files.sewport.com/blog/10-mistakes-to-avoid-when-starting-your-own-clothing-line/clothing-line.jpeg"
+                                    });
                                 }}
                             />
                         </View>
@@ -188,6 +191,8 @@ export default function Home(props) {
                                     style={{
                                         flexDirection: "row"
                                     }}
+
+                                    key={ind}
                                 >
                                     <Image
                                         style={{
@@ -200,6 +205,12 @@ export default function Home(props) {
                                         source={{
                                             uri: el[1]
                                         }}
+                                        onPress={() => {
+                                            navigation.navigate('Products', {
+                                                otherParam: el[0],
+                                                display: el[1]
+                                            });
+                                        }}
                                     />
                                     <Text
                                         style={{
@@ -208,6 +219,12 @@ export default function Home(props) {
                                             marginTop: hp(1.3),
                                             fontSize: hp(2),
                                             letterSpacing: hp(0.1)
+                                        }}
+                                        onPress={() => {
+                                            navigation.navigate('Products', {
+                                                otherParam: el[0],
+                                                display: el[1]
+                                            });
                                         }}
                                     >
                                         {el[0]}
@@ -237,15 +254,15 @@ export default function Home(props) {
                             textAlign: "center"
                         }}
                         onPress={() => {
-                            if(showNum == companies.length){
+                            if (showNum == companies.length) {
                                 Toast.show({
                                     type: 'error',
-                                    text1: 'No more products to show.'
+                                    text1: 'No more companies to show.'
                                 });
                                 return;
                             }
-                            
-                            setShowNum(showNum + Math.min(3, companies.length-showNum))
+
+                            setShowNum(showNum + Math.min(3, companies.length - showNum))
                         }}
                     />
 
@@ -254,10 +271,11 @@ export default function Home(props) {
                             fontSize: hp(3),
                             fontWeight: "500",
                             marginTop: hp(4),
-                            marginLeft: hp(1)
+                            marginLeft: hp(1),
+                            marginBottom: hp(1)
                         }}
                     >
-                        MAHAGRID 30% Off
+                        Recently Added
                     </Text>
                     <View
                         style={{
@@ -267,62 +285,41 @@ export default function Home(props) {
                         <ScrollView
                             horizontal={true}
                         >
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(18),
-                                        width: hp(18),
-                                        marginLeft: hp(2)
-                                    }}
-                                    source={{
-                                        uri: "https://www.muji.com/wp-content/uploads/sites/12/2021/02/026.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(4)
-                                    }}
-                                >
-                                    beige hoodie thing
-                                </Text>
-                            </View>
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(18),
-                                        width: hp(18),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://simage.mujikorea.net/goods/31/15/30/91/BF197A3A_COL_851_400.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(4)
-                                    }}
-                                >
-                                    green shirt thing
-                                </Text>
-                            </View>
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(18),
-                                        width: hp(18),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://simage.mujikorea.net/goods/31/15/30/90/BF196A3A_COL_25_400.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(4)
-                                    }}
-                                >
-                                    cream shirt thing
-                                </Text>
+                            <View
+                                style={{
+                                    flexDirection: "row"
+                                }}
+                            >
+                                {
+                                    recentProducts.slice(0, 5).map((el, ind) => (
+                                        <View
+                                            style={{
+                                                justifyContent: "space-around",
+                                            }}
+                                            key={ind}
+                                        >
+                                            <Image
+                                                style={{
+                                                    height: hp(18),
+                                                    width: hp(18),
+                                                    marginLeft: hp(2)
+                                                }}
+                                                source={{
+                                                    uri: el[2]
+                                                }}
+                                            />
+                                            <Text
+                                                style={{
+                                                    alignSelf: "center",
+                                                    fontWeight: "500"
+                                                }}
+                                            >
+                                                {el[1]}
+                                            </Text>
+
+                                        </View>
+                                    ))
+                                }
                             </View>
                         </ScrollView>
                     </View>
