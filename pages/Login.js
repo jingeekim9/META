@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Input, Button } from '@rneui/base';
@@ -33,6 +33,63 @@ export default function Login(props) {
     const [passwordError, setPasswordError] = useState("");
     const [loading, setLoading] = useState("");
 
+    useEffect(() => {
+        const autoLogin = async() => {
+            var newEmail = await AsyncStorage.getItem('email');
+            var newPassword = await AsyncStorage.getItem('password');
+            setLoading(true);
+            if(newEmail)
+            {
+                signInWithEmailAndPassword(auth, newEmail, newPassword)
+            .then(async(userCredential) => {
+                // Signed in 
+                const q = query(collection(db, "Users"), where("email", "==", newEmail));
+                var name = "";
+                var type = "";
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                    var data = doc.data();
+                    name = data['name']
+                    type = data['type']
+                });
+                await AsyncStorage.setItem('name', name);
+                await AsyncStorage.setItem('type', type);
+                setLoading(false);
+                const user = userCredential.user;
+                if(type == "user")
+                {
+                    props.navigation.reset({
+                        index: 0,
+                        routes: [{ name: "Home" }]
+                    });
+                }
+                else
+                {
+                    props.navigation.reset({
+                        index: 0,
+                        routes: [{ name: "Admin" }]
+                    });
+                }
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode)
+                if (errorCode.includes("invalid-email")) {
+                    setEmailError("Please enter a valid email");
+                }
+                else if (errorCode.includes("invalid-login-credentials")) {
+                    setEmailError("Please check your email or your password");
+                }
+                setLoading(false);
+            });
+            }
+        } 
+        autoLogin();
+    }, [])
+
     const login = async () => {
         setLoading(true);
         if (email == "") {
@@ -49,20 +106,34 @@ export default function Login(props) {
                 // Signed in 
                 const q = query(collection(db, "Users"), where("email", "==", email));
                 var name = "";
+                var type = "";
                 const querySnapshot = await getDocs(q);
                 querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
                     var data = doc.data();
                     name = data['name']
+                    type = data['type']
                 });
                 await AsyncStorage.setItem('email', email);
+                await AsyncStorage.setItem('password', password);
                 await AsyncStorage.setItem('name', name);
+                await AsyncStorage.setItem('type', type);
                 setLoading(false);
                 const user = userCredential.user;
-                props.navigation.reset({
-                    index: 0,
-                    routes: [{ name: "Home" }]
-                });
+                if(type == "user")
+                {
+                    props.navigation.reset({
+                        index: 0,
+                        routes: [{ name: "Home" }]
+                    });
+                }
+                else
+                {
+                    props.navigation.reset({
+                        index: 0,
+                        routes: [{ name: "Admin" }]
+                    });
+                }
                 // ...
             })
             .catch((error) => {

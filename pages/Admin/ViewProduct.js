@@ -4,23 +4,6 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon } from '@rneui/themed';
 
-export default function Home() {
-
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
-
-    useEffect(() => {
-        const getData = async () => {
-            var email = await AsyncStorage.getItem('email');
-            var name = await AsyncStorage.getItem('name');
-
-            setEmail(email);
-            setName(name);
-        }
-        getData();
-    }, [])
-
-}
 export default function ViewProducts() {
     const [products, setProducts] = useState([
         {

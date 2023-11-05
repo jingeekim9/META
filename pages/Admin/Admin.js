@@ -25,15 +25,32 @@ return (
                         }}
                     >
                     Admin Page</Text>
-      <View style={styles.vertical}>
+      <View style={{
+          marginTop: hp(5),
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          backgroundColor: 'white',
+          alignItems: 'center'
+      }}>
         <Text
         style={{
           fontWeight: 'bold',
-          fontSize: 20,
-          marginTop: hp(3),
-          marginLeft: hp(2),
+          fontSize: hp(3),
           color: "black",
-          }}>Order reception:                        10건</Text>
+          }}>
+            Number of orders:
+          </Text>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: hp(3),
+              color: "black",
+              marginLeft: hp(2)
+            }}
+          >
+            10
+          </Text>
       </View>
       <View
         style={{
