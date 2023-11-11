@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Button } from '@rneui/themed';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { collection, getDocs } from "firebase/firestore";
 import Toast from "react-native-toast-message";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -22,7 +23,7 @@ const db = getFirestore(app);
 
 
 
-export default function Products({route, navigation}) {
+export default function Products({ route, props, navigation }) {
     const [products, setProducts] = useState([]);
     const [showNum, setShowNum] = useState(2);
     const [title, setTitle] = useState("")
@@ -58,7 +59,8 @@ export default function Products({route, navigation}) {
                     "price": data["price"],
                     "productImage": data["productImage"],
                     "productName": data["productName"],
-                    "size": data["size"]
+                    "size": data["size"],
+                    "docId" : doc.id
                 })
             });
             setProducts(tempArray)
@@ -147,17 +149,25 @@ export default function Products({route, navigation}) {
                                             <View
                                                 key = {ind2}
                                             >
-                                                <Image
-                                                    style={{
-                                                        height: hp(20),
-                                                        width: hp(20),
-                                                        marginBottom: hp(1.5),
-                                                        marginLeft: hp(1)
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        navigation.navigate('Detail', {
+                                                            otherParam: el2["docId"]
+                                                        });
                                                     }}
-                                                    source={{
-                                                        uri: el2["productImage"]
-                                                    }}
-                                                />
+                                                >
+                                                    <Image
+                                                        style={{
+                                                            height: hp(20),
+                                                            width: hp(20),
+                                                            marginBottom: hp(1.5),
+                                                            marginLeft: hp(1)
+                                                        }}
+                                                        source={{
+                                                            uri: el2["productImage"]
+                                                        }}
+                                                    />
+                                                </TouchableOpacity>
                                                 <Text
                                                     style={{
                                                         marginLeft: hp(2)
@@ -170,6 +180,11 @@ export default function Products({route, navigation}) {
                                                         marginLeft: hp(2),
                                                         marginTop: hp(1),
                                                         fontWeight: "500",
+                                                    }}
+                                                    onPress={() => {
+                                                        navigation.navigate('Detail', {
+                                                            otherParam: el2["docId"]
+                                                        });
                                                     }}
                                                 >
                                                     ${el2["price"]}
