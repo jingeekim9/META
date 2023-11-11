@@ -5,44 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon } from '@rneui/themed';
 
 export default function ViewProducts() {
-    const [products, setProducts] = useState([
-        {
-            url: "https://m.media-amazon.com/images/I/61fOR8yqOmL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "INDIE",
-            company: "xcvb",
-            price: 9584
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/61HunMUy6BL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "FUNK",
-            company: "hjkl",
-            price: 2342
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/714XSiO1mtL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "POP",
-            company: "ghjk",
-            price: 4859
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/51znawVkEIL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "CLASSIC",
-            company: "asdfg",
-            price: 3029
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/71QNbYasFjL._AC_SX679._SX._UX._SY._UY_.jpg",
-            name: "MOZART",
-            company: "tyuio",
-            price: 23423
-        },
-        {
-            url: "https://m.media-amazon.com/images/I/61JOHamx0jL._AC_UX679_.jpg",
-            name: "VOLTAIRE",
-            company: "qwerty",
-            price: 1132
-        },
-    ]);
+    const [products, setProducts] = useState([]);
+
     const [showNum, setShowNum] = useState(2);
 
     function chunk (arr, len) {
@@ -56,6 +20,24 @@ export default function ViewProducts() {
       
         return chunks;
     }
+
+    const companyRef = async () => {
+        const docRef = await addDoc(collection(db, "Products"), {
+            companyName: name
+        });
+    }
+    useEffect(() => {
+        const getDatabase = async () => {
+            const querySnapshot = await getDocs(collection(db, "Products"));
+            var tempArray = []
+            querySnapshot.forEach((doc) => {
+                var data = doc.data()
+                tempArray.push(data)
+            });
+            setCompanies(tempArray) 
+     } 
+     getDatabase()
+    },[]) 
 
 
     return (
