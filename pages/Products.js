@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Button } from '@rneui/themed';
+import { Button, Icon } from '@rneui/themed';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, where, query } from "firebase/firestore";
 import Toast from "react-native-toast-message";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
@@ -45,7 +45,9 @@ export default function Products({ route, props, navigation }) {
 
     useEffect(() => {
         const getDatabase = async () => {
-            const querySnapshot = await getDocs(collection(db, "Products"));
+            const productRef = collection(db, "Products");
+            const q = query(productRef, where("companyName", "==", otherParam));
+            const querySnapshot = await getDocs(q);
             var tempArray = []
             querySnapshot.forEach((doc) => {
                 var data = doc.data()
@@ -76,37 +78,44 @@ export default function Products({ route, props, navigation }) {
                 backgroundColor: "white"
             }}
         >
-            <Text
+            <View
                 style={{
-                    textAlign: "center",
-                    fontSize: hp(3),
-                    letterSpacing: hp(0.2),
                     marginTop: hp(7),
-                    marginBottom: hp(2)
+                    marginBottom: hp(2),
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
                 }}
             >
-                PRODUCTS
-            </Text>
-            <ScrollView>
-                <View
+                <Icon 
+                    type="ionicon"
+                    name="arrow-back-outline"
+                    size={hp(4)}
                     style={{
-                        backgroundColor: "black",
-                        alignSelf: "center",
-                        width: "100%",
-                        height: hp(5)
+                        marginLeft: hp(1)
+                    }}
+                    onPress={() => {
+                        navigation.goBack()
+                    }}
+                />
+                <Text
+                    style={{
+                        textAlign: "center",
+                        fontSize: hp(3),
+                        letterSpacing: hp(0.2)
                     }}
                 >
-                    <Text
-                        style={{
-                            color: "white",
-                            alignSelf: "center",
-                            marginTop: hp(1.5),
-                            fontWeight: "700"
-                        }}
-                    >
-                        FREE SHIPPING ON ALL ORDERS +$150
-                    </Text>
+                    PRODUCTS
+                </Text>
+                <View
+                    style={{
+                        width: hp(4),
+                        marginRight: hp(1)
+                    }}
+                >
                 </View>
+            </View>
+            <ScrollView>
                 <Image
                     style={{
                         height: hp(45),
@@ -135,6 +144,24 @@ export default function Products({ route, props, navigation }) {
                 >
                     <View>
                         {
+                            products.length == 0 ?
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    marginBottom: hp(5)
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        fontSize: hp(2),
+                                        color: 'gray'
+                                    }}
+                                >
+                                    No products to show
+                                </Text>
+                            </View>
+                            :
                             chunk(products, 2).slice(0, showNum).map((el, ind) => (
                                 <View
                                     style={{

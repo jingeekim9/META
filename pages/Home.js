@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from '@rneui/themed';
@@ -9,7 +9,6 @@ import { collection, getDocs } from "firebase/firestore";
 import { Icon } from '@rneui/themed';
 import Toast from "react-native-toast-message";
 import Products from "./Products";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -138,61 +137,77 @@ export default function Home({ props, navigation }) {
                         <View
                             style={{
                                 backgroundColor: '#f2ead5',
-                                padding: hp(1),
-                                borderRadius: hp(2)
+                                borderRadius: hp(2),
+                                width: hp(7),
+                                height: hp(7),
+                                justifyContent: 'center',
+                                alignItems: 'center'
                             }}
                         >
-                            <Icon
-                                size={hp(5)}
-                                name='alarm'
-                                type='ionicon'
-                                color='black'
-                            />
-                        </View>
-                        <View
-                            style={{
-                                backgroundColor: '#f2ead5',
-                                padding: hp(1),
-                                borderRadius: hp(2)
-                            }}
-                        >
-                            <Icon
-                                size={hp(5)}
-                                name='cart'
-                                type='ionicon'
-                                color='black'
-                                onPress={() => {
-                                    navigation.navigate('Products', {
-                                        otherParam: "UPPURPLE",
-                                        display: "https://s3.eu-west-2.amazonaws.com/files.sewport.com/blog/10-mistakes-to-avoid-when-starting-your-own-clothing-line/clothing-line.jpeg"
-                                    });
+                            <Image 
+                                source={require('../assets/shirt.png')}
+                                style={{
+                                    width: hp(5),
+                                    height: hp(5)
                                 }}
+                                resizeMode="cover"
                             />
                         </View>
                         <View
                             style={{
                                 backgroundColor: '#f2ead5',
-                                padding: hp(1),
-                                borderRadius: hp(2)
+                                borderRadius: hp(2),
+                                width: hp(7),
+                                height: hp(7),
+                                justifyContent: 'center',
+                                alignItems: 'center'
                             }}
                         >
-                            <Icon
-                                size={hp(5)}
-                                name='bookmark'
-                                type='ionicon'
+                            <Image 
+                                source={require('../assets/pants.png')}
+                                style={{
+                                    width: hp(5),
+                                    height: hp(5)
+                                }}
+                                resizeMode="cover"
                             />
                         </View>
                         <View
                             style={{
                                 backgroundColor: '#f2ead5',
-                                padding: hp(1),
-                                borderRadius: hp(2)
+                                borderRadius: hp(2),
+                                width: hp(7),
+                                height: hp(7),
+                                justifyContent: 'center',
+                                alignItems: 'center'
                             }}
                         >
-                            <Icon
-                                size={hp(5)}
-                                name='clipboard'
-                                type='ionicon'
+                            <Image 
+                                source={require('../assets/jacket.png')}
+                                style={{
+                                    width: hp(5),
+                                    height: hp(5)
+                                }}
+                                resizeMode="cover"
+                            />
+                        </View>
+                        <View
+                            style={{
+                                backgroundColor: '#f2ead5',
+                                borderRadius: hp(2),
+                                width: hp(7),
+                                height: hp(7),
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <Image 
+                                source={require('../assets/shoe.png')}
+                                style={{
+                                    width: hp(5),
+                                    height: hp(5)
+                                }}
+                                resizeMode="cover"
                             />
                         </View>
                     </View>
@@ -213,11 +228,16 @@ export default function Home({ props, navigation }) {
                     <View>
                         {
                             companies.slice(0, showNum).map((el, ind) => (
-                                <View
+                                <TouchableOpacity
                                     style={{
                                         flexDirection: "row"
                                     }}
-
+                                    onPress={() => {
+                                        navigation.navigate('Products', {
+                                            otherParam: el[0],
+                                            display: el[1]
+                                        });
+                                    }}
                                     key={ind}
                                 >
                                     <Image
@@ -246,17 +266,11 @@ export default function Home({ props, navigation }) {
                                             fontSize: hp(2),
                                             letterSpacing: hp(0.1)
                                         }}
-                                        onPress={() => {
-                                            navigation.navigate('Products', {
-                                                otherParam: el[0],
-                                                display: el[1]
-                                            });
-                                        }}
                                     >
                                         {el[0]}
                                     </Text>
 
-                                </View>
+                                </TouchableOpacity>
                             ))
                         }
                     </View>
