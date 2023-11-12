@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, Platform, ScrollView } from "react-native";
+import { View, Text, SafeAreaView, Platform, ScrollView, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Input, Button, color } from '@rneui/base';
 import { initializeApp } from "firebase/app";
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon, AirbnbRating } from '@rneui/themed';
 import { Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import Toast from "react-native-toast-message";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -29,9 +30,15 @@ export default function Detail(props) {
     const [heartPressed, setHeartPress] = useState(false);
     const [category, setCategory] = useState("");
     const [price, setPrice] = useState("");
+    const [description, setDescription] = useState("")
+    const [productImage, setproductImage] = useState("")
+    const [productName, setproductName] = useState("");
+    const [companyName, setcompanyName] = useState("");
     const [checkoutPressed, setcheckoutPressed] = useState(false);
     const [options1Pressed, setoptions1Pressed] = useState(false);
     const [options2Pressed, setoptions2Pressed] = useState(false);
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
+    const [color, setColor] = useState("");
     const [colorOpen, setColorOpen] = useState(false);
     const [colorOptions, setColorOptions] = useState([
         {label: "Red", value: "red"},
@@ -43,7 +50,6 @@ export default function Detail(props) {
         {label: "L", value: "L"},
         {label: "M", value: "M"}
     ])
-    const [color, setColor] = useState("");
 
     useEffect(() => {
         const getDetails = async() => {
@@ -51,11 +57,51 @@ export default function Detail(props) {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 var data = docSnap.data();
+
+                var colorArray = []
+                var sizeArray = []
+
+                for(var i = 0; i < data['color'].length; i++)
+                {
+                    var colorDict = {
+                        label: data["color"][i],
+                        value: data["color"][i]
+                    }
+                    colorArray.push(colorDict)
+                }
+                setColorOptions(colorArray)
+
+                for(var i = 0; i < data['size'].length; i++)
+                {
+                    var sizeDict = {
+                        label: data["size"][i],
+                        value: data["size"][i]
+                    }
+                    sizeArray.push(sizeDict)
+                }
+                setSizeOptions(sizeArray)
+
+
                 var category = data["category"];
                 setCategory(category);
-                var price = data["price"];
-                let text = price.toLocaleString("en-US", {style:"currency", currency:"KRW"});
-                setPrice(price);
+
+                var price = parseInt(data["price"]);
+                let text = price.toLocaleString("ko-KR", {style:"currency", currency:"KRW"});
+                setPrice(text);
+
+                var description = data["description"];
+                setDescription(description);
+
+                var productImage = data["productImage"];
+                setproductImage(productImage);
+
+                var productName = data["productName"];
+                setproductName(productName);
+
+                var companyName = data["companyName"]
+                setcompanyName(companyName);
+                
+
               } else {
                 // docSnap.data() will be undefined in this case
                 console.log("No such document!");
@@ -64,7 +110,40 @@ export default function Detail(props) {
 
         getDetails();
     }, [])
+    
+    const checkout = async() => {
+        if(color == "")
+        {
+            Toast.show({
+                type: 'error',
+                text1: "Please choose a color."
+            });
+            return;
+        }
+        else if(size == "")
+        {
+            Toast.show({
+                type: 'error',
+                text1: "Please choose a size."
+            });
+            return;
+        }
+        setCheckoutLoading(true);
 
+        const docRef = await addDoc(collection(db, "Checkout"), {
+            productName: productName,
+            price: price,
+            category: category,
+            size: size,
+            color: color,
+            companyName: companyName
+        });
+
+        setCheckoutLoading(false);
+        setcheckoutPressed(false);
+        setColor("");
+        setSize("");
+    }
 
     return (
         <SafeAreaView
@@ -81,21 +160,27 @@ export default function Detail(props) {
                     flexDirection: 'row',
                     alignItems: 'center'
                 }}>
-                <Image
-                    style={{
-                        width: hp(2.5),
-                        height: hp(2.5),
-                        marginLeft: hp(2)
+                <TouchableOpacity
+                    onPress={() => {
+                        props.navigation.navigate("Home")
                     }}
-                    source={require('../assets/left-arrow.png')}
-                />
+                >
+                    <Image
+                        style={{
+                            width: hp(2.5),
+                            height: hp(2.5),
+                            marginLeft: hp(2)
+                        }}
+                        source={require('../assets/left-arrow.png')}
+                    />
+                </TouchableOpacity>
                 <Text
                     style={{
                         fontSize: hp(3),
                         paddingLeft: hp(1),
                         fontWeight: 'bold'
                     }}>
-                    Company Name
+                    {companyName}
                 </Text>
             </View>
             <View
@@ -113,7 +198,9 @@ export default function Detail(props) {
                                 justifyContent: "center",
                                 alignItems: "center"
                             }}
-                            source={require('../assets/tshirt.png')}
+                            source={{
+                                uri: productImage
+                            }}
                             resizeMode="cover"
                         />
 
@@ -158,7 +245,7 @@ export default function Detail(props) {
                                         fontSize: hp(2.5),
                                         fontWeight: 'bold'
                                     }}>
-                                    Black T-Shirt
+                                    {productName}
                                 </Text>
 
                             </View>
@@ -194,35 +281,6 @@ export default function Detail(props) {
                                 
                             </Text>
                         </View>
-                    </View>
-
-                    {/* Long Image */}
-                    <View
-                        style = {{
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}>
-                        <Image
-                                style={{
-                                    marginTop: hp(5)
-                            }}
-                            source={require('../assets/guy1.png')}
-
-                        />
-                        <Image
-                                style={{
-                                    marginTop: hp(5)
-                            }}
-                            source={require('../assets/guy2.png')}
-
-                        />
-                        <Image
-                                style={{
-                                    marginTop: hp(5)
-                            }}
-                            source={require('../assets/guy3.png')}
-
-                        />
                     </View>
                 </ScrollView>
 
@@ -302,7 +360,7 @@ export default function Detail(props) {
                                         Total Price: {" "}
                                         {
                                             (size && color) ?
-                                            <Text style={{fontWeight: 'bold'}}>$2,000</Text>
+                                            <Text style={{fontWeight: 'bold'}}>{price}</Text>
                                             :
                                             <Text style={{fontWeight: 'bold'}}>$0</Text>
                                         }
@@ -332,6 +390,10 @@ export default function Detail(props) {
                                     fontWeight: 'bold',
                                     color: 'white'
                                 }}
+                                onPress={() => {
+                                    checkout();
+                                }}
+                                loading={checkoutLoading}
                             >
 
                                 Checkout

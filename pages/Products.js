@@ -7,7 +7,6 @@ import { getFirestore } from 'firebase/firestore';
 import { collection, getDocs } from "firebase/firestore";
 import Toast from "react-native-toast-message";
 
-
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
     authDomain: "meta-fc205.firebaseapp.com",
@@ -22,10 +21,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-export default function Products() {
+
+export default function Products({route, navigation}) {
     const [products, setProducts] = useState([]);
     const [showNum, setShowNum] = useState(2);
+    const [title, setTitle] = useState("")
     const [category, setCategory] = useState("shirt");
+    const {otherParam, display} = route.params;
 
     function chunk(arr, len) {
         var chunks = [],
@@ -46,7 +48,7 @@ export default function Products() {
             var tempArray = []
             querySnapshot.forEach((doc) => {
                 var data = doc.data()
-                if (data["category"] != category) {
+                if (data["companyName"] != otherParam) {
                     return;
                 }
                 tempArray.push({
@@ -109,7 +111,7 @@ export default function Products() {
                         width: "100%"
                     }}
                     source={{
-                        uri: "https://superfuture.com/wp-content/uploads/2021/12/musinsa-standard-seoul-07.png"
+                        uri: display
                     }}
                 />
                 <Text
@@ -118,10 +120,11 @@ export default function Products() {
                         fontSize: hp(3),
                         fontWeight: "600",
                         marginTop: hp(4),
-                        marginBottom: hp(2)
+                        marginBottom: hp(3),
+                        letterSpacing: hp(0.1)
                     }}
                 >
-                    T-Shirt
+                    {otherParam}
                 </Text>
                 <View
                     style={{
@@ -137,10 +140,13 @@ export default function Products() {
                                         marginBottom: hp(6),
                                         justifyContent: 'space-around'
                                     }}
+                                    key={ind}
                                 >
                                     {
                                         el.map((el2, ind2) => (
-                                            <View>
+                                            <View
+                                                key = {ind2}
+                                            >
                                                 <Image
                                                     style={{
                                                         height: hp(20),
