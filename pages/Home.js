@@ -9,6 +9,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { Icon } from '@rneui/themed';
 import Toast from "react-native-toast-message";
 import Products from "./Products";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -60,7 +61,7 @@ export default function Home({ props, navigation }) {
             var tempArray = []
             querySnapshot.forEach((doc) => {
                 var data = doc.data()
-                tempArray.push([data["dateAdded"]["seconds"], data["productName"], data["productImage"]])
+                tempArray.push([data["dateAdded"]["seconds"], data["productName"], data["productImage"], doc.id])
             });
             var sortedArray = tempArray.sort((a, b) => {
                 return b[0] - a[0];
@@ -323,20 +324,33 @@ export default function Home({ props, navigation }) {
                                             }}
                                             key={ind}
                                         >
-                                            <Image
-                                                style={{
-                                                    height: hp(18),
-                                                    width: hp(18),
-                                                    marginLeft: hp(2)
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    navigation.navigate('Detail', {
+                                                        otherParam: el[3]
+                                                    });
                                                 }}
-                                                source={{
-                                                    uri: el[2]
-                                                }}
-                                            />
+                                            >
+                                                <Image
+                                                    style={{
+                                                        height: hp(18),
+                                                        width: hp(18),
+                                                        marginLeft: hp(2)
+                                                    }}
+                                                    source={{
+                                                        uri: el[2]
+                                                    }}
+                                                />
+                                            </TouchableOpacity>
                                             <Text
                                                 style={{
                                                     alignSelf: "center",
                                                     fontWeight: "500"
+                                                }}
+                                                onPress={() => {
+                                                    navigation.navigate('Detail', {
+                                                        otherParam: el[3]
+                                                    });
                                                 }}
                                             >
                                                 {el[1]}

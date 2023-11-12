@@ -26,7 +26,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Firestore
 const db = getFirestore(app);
 
-export default function Detail(props) {
+export default function Detail({ props, route, navigation }) {
     const [heartPressed, setHeartPress] = useState(false);
     const [category, setCategory] = useState("");
     const [price, setPrice] = useState("");
@@ -51,9 +51,11 @@ export default function Detail(props) {
         {label: "M", value: "M"}
     ])
 
+    const {otherParam} = route.params;
+
     useEffect(() => {
         const getDetails = async() => {
-            const docRef = doc(db, "Products", "79Fd9IWxIAFZvxTdSz1o");
+            const docRef = doc(db, "Products", otherParam);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 var data = docSnap.data();
@@ -162,7 +164,7 @@ export default function Detail(props) {
                 }}>
                 <TouchableOpacity
                     onPress={() => {
-                        props.navigation.navigate("Home")
+                        navigation.goBack()
                     }}
                 >
                     <Image
