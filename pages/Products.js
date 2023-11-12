@@ -58,7 +58,7 @@ export default function Products({ route, props, navigation }) {
                 var data = doc.data()
                 tempArray.push({
                     "category": data["category"],
-                    "color": data["description"],
+                    "color": data["color"],
                     "description": data["description"],
                     "price": data["price"],
                     "productImage": data["productImage"],
