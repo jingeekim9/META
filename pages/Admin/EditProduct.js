@@ -7,7 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import uuid from "uuid";
 import { initializeApp } from "firebase/app";
-import { collection, doc, addDoc, getFirestore } from "firebase/firestore";
+import { collection, doc, addDoc, getFirestore, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -26,15 +26,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export default function AddProduct(props) {
-    const [productImage, setProductImage] = useState(null); 
-    const [productName, setProductName] = useState("");
-    const [price, setPrice] = useState(0);
-    const [category, setCategory] = useState("");
-    const [size, setSize] = useState("");
-    const [color, setColor] = useState("");
-    const [description, setDescription] = useState("");
-    const [loading, setLoading] = useState("");
+export default function EditProduct(props) {
+    const {category, color, description, price, productImage, productName, size, docId} = props.route.params;
+    const [newProductImage, setProductImage] = useState(productImage); 
+    const [newProductName, setProductName] = useState(productName);
+    const [newPrice, setPrice] = useState(price);
+    const [newCategory, setCategory] = useState(category);
+    const [newSize, setSize] = useState(size.join(', '));
+    const [newColor, setColor] = useState(color.join(', '));
+    const [newDescription, setDescription] = useState(description);
+    const [loading, setLoading] = useState(false);
 
     const pickImage = async() => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -133,8 +134,8 @@ export default function AddProduct(props) {
 
         var name = await AsyncStorage.getItem("name");
 
-
-        const docRef = await addDoc(collection(db, "Products"), {
+        const docRef = doc(db, "Products", docId);
+        await updateDoc(docRef, {
             productName: productName,
             price: price,
             category: category,
@@ -176,7 +177,7 @@ export default function AddProduct(props) {
                     fontWeight: "500",
                     color: "black"
                 }}
-
+                value={newProductName}
                 style={{
                     marginLeft: hp(1.5),
                     fontWeight: "600"
@@ -202,7 +203,7 @@ export default function AddProduct(props) {
                 placeholder="1190"
                 autoCapitalize={"none"}
                 label={"Price"}
-
+                value={newPrice}
 
                 labelStyle={{
                     marginLeft: hp(1),
@@ -242,6 +243,7 @@ export default function AddProduct(props) {
                     color: "black",
                     fontWeight: "500"
                 }}
+                value={newCategory}
                 style={{
                     marginLeft: hp(1.5),
                     fontWeight: "600"
@@ -277,7 +279,7 @@ export default function AddProduct(props) {
                     marginLeft: hp(1.5),
                     fontWeight: "600"
                 }}
-
+                value={newSize}
                 inputContainerStyle={{
                     borderWidth: hp(0.2),
                     borderRadius: hp(0.85),
@@ -308,7 +310,7 @@ export default function AddProduct(props) {
                     marginLeft: hp(1.5),
                     fontWeight: "600"
                 }}
-
+                value={newColor}
                 inputContainerStyle={{
                     borderWidth: hp(0.2),
                     borderRadius: hp(0.85),
@@ -339,7 +341,7 @@ export default function AddProduct(props) {
                     marginLeft: hp(1.5),
                     fontWeight: "500"
                 }}
-
+                value={newDescription}
                 inputContainerStyle={{
                     borderWidth: hp(0.2),
                     borderRadius: hp(0.85),
@@ -425,7 +427,7 @@ export default function AddProduct(props) {
                 }}
             >
                 <Button
-                        title="Add"
+                        title="Update"
                         titleStyle={{
                             color: "white",
                             fontWeight: "500"

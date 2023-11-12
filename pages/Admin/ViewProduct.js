@@ -1,212 +1,117 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Image, ScrollView, TouchableOpacity,StyleProp } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Icon } from '@rneui/themed';
-import { StatusBar } from 'expo-status-bar';
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Button, Icon } from '@rneui/themed';
+import { initializeApp } from "firebase/app";
+import { getFirestore } from 'firebase/firestore';
+import { collection, getDocs, where, query } from "firebase/firestore";
+import Toast from "react-native-toast-message";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-export default function ViewProducts(props) {
+const firebaseConfig = {
+    apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
+    authDomain: "meta-fc205.firebaseapp.com",
+    projectId: "meta-fc205",
+    storageBucket: "meta-fc205.appspot.com",
+    messagingSenderId: "313671883891",
+    appId: "1:313671883891:web:3ecf94acf648ee9ba85e06",
+    measurementId: "G-953P5N046G"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+
+export default function ViewProduct({ route, props, navigation }) {
     const [products, setProducts] = useState([]);
-
     const [showNum, setShowNum] = useState(2);
+    const [title, setTitle] = useState("")
+    const [category, setCategory] = useState("shirt");
 
-    function chunk (arr, len) {
+    function chunk(arr, len) {
         var chunks = [],
             i = 0,
             n = arr.length;
-      
+
         while (i < n) {
-          chunks.push(arr.slice(i, i += len));
+            chunks.push(arr.slice(i, i += len));
         }
-      
+
         return chunks;
     }
 
-    const companyRef = async () => {
-        const docRef = await addDoc(collection(db, "Products"), {
-            companyName: name
-        });
-    }
+
     useEffect(() => {
         const getDatabase = async () => {
-            const querySnapshot = await getDocs(collection(db, "Products"));
+            const productRef = collection(db, "Products");
+            const q = query(productRef, where("companyName", "==", "Logncoding"));
+            const querySnapshot = await getDocs(q);
             var tempArray = []
             querySnapshot.forEach((doc) => {
                 var data = doc.data()
-                tempArray.push(data)
+                tempArray.push({
+                    "category": data["category"],
+                    "color": data["color"],
+                    "description": data["description"],
+                    "price": data["price"],
+                    "productImage": data["productImage"],
+                    "productName": data["productName"],
+                    "size": data["size"],
+                    "docId" : doc.id
+                })
             });
-            setCompanies(tempArray) 
-     } 
-     getDatabase()
-    },[]) 
+            setProducts(tempArray)
+        }
 
+        getDatabase();
+    }, [])
 
     return (
         <View
             style={{
                 flex: 1,
-                alignItems: 'center',
                 backgroundColor: "white"
             }}
         >
-            <Text
+            <View
                 style={{
-                    textAlign: "center",
-                    fontSize: hp(3),
-                    letterSpacing: hp(0.2),
                     marginTop: hp(7),
-                    marginBottom: hp(2)
+                    marginBottom: hp(2),
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
                 }}
             >
-                MY PRODUCTS
-            </Text>
-            <ScrollView
-                            horizontal={true}
-                            decelerationRate={0}
-                            snapToInterval={hp(42)}
-                            snapToAlignment={"center"}
-                        >
-                            <View>
-                                <TouchableOpacity
-                                    style={{
-                                        height: hp(60),
-                                        width: hp(30),
-                                        marginLeft: hp(2),
-                                        backgroundColor : "white"
-                                     }}
-                                        onPress={() => {
-                                         props.navigation.navigate("CompanyA");
-                                         }}
-                                 >
-                                <Image
-                                    style={{
-                                        height: hp(60),
-                                        width: hp(30),
-                                        marginLeft: hp(2)
-                                    }}
-                                    source={{
-                                        uri: "https://www.prada.com/content/dam/pradanux/e-commerce/2023/03/03/Linea_Rossa/snodo_mix/mosaic_1/Card_2_MB.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontWeight: "500",
-                                        fontSize: hp(2.5)
-                                    }}
-                                >
-                                    Prada
-                                </Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View>
-                                <TouchableOpacity
-                                 style={{
-                                        height: hp(60),
-                                        width: hp(30),
-                                        marginLeft: hp(2),
-                                        backgroundColor : "white"
-                                     }}
-                                        onPress={() => {
-                                         props.navigation.navigate("CompanyB");
-                                         }}
-                                 >
-                                <Image
-                                    style={{
-                                        height: hp(60),
-                                        width: hp(30),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://ovomod.com/images/obgrabber/2020-10/ded47b1d1e.jpeg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontWeight: "500",
-                                        fontSize: hp(2.5)
-                                    }}
-                                >
-                                    Gucci
-                                </Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View>
-                            <TouchableOpacity
-                                    style={{
-                                        height: hp(60),
-                                        width: hp(30),
-                                        marginLeft: hp(2),
-                                        backgroundColor : "white"
-                                     }}
-                                        onPress={() => {
-                                         props.navigation.navigate("CompanyC");
-                                         }}
-                                 >
-                                <Image
-                                    style={{
-                                        height: hp(60),
-                                        width: hp(30),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://assets.vogue.com/photos/5ef01e57f0c4a73e33fa38c0/master/pass/19-burberry-backstage-fw20-corey-tenold.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontWeight: "500",
-                                        fontSize: hp(2.5)
-                                    }}
-                                >
-                                    Burberry
-                                </Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View>
-                            <TouchableOpacity
-                                    style={{
-                                        height: hp(60),
-                                        width: hp(30),
-                                        marginLeft: hp(2),
-                                        backgroundColor : "white"
-                                     }}
-                                        onPress={() => {
-                                         props.navigation.navigate("CompanyD");
-                                         }}
-                                 >
-                                <Image
-                                    style={{
-                                        height: hp(60),
-                                        width: hp(30),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://media.vogue.co.uk/photos/60435faf107e7ce55db43fbb/master/pass/DIOR_JISOO_AMBASSADOR.jpeg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontWeight: "500",
-                                        fontSize: hp(2.5)
-                                    }}
-                                >
-                                    Dior
-                                </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </ScrollView>
+                <Icon 
+                    type="ionicon"
+                    name="arrow-back-outline"
+                    size={hp(4)}
+                    style={{
+                        marginLeft: hp(1)
+                    }}
+                    onPress={() => {
+                        navigation.goBack()
+                    }}
+                />
+                <Text
+                    style={{
+                        textAlign: "center",
+                        fontSize: hp(3),
+                        letterSpacing: hp(0.2)
+                    }}
+                >
+                    PRODUCTS
+                </Text>
+                <View
+                    style={{
+                        width: hp(4),
+                        marginRight: hp(1)
+                    }}
+                >
+                </View>
+            </View>
             <ScrollView>
-                
                 <View
                     style={{
                         flexDirection: "column"
@@ -214,42 +119,70 @@ export default function ViewProducts(props) {
                 >
                     <View>
                         {
+                            products.length == 0 ?
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    marginBottom: hp(5)
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        fontSize: hp(2),
+                                        color: 'gray'
+                                    }}
+                                >
+                                    No products to show
+                                </Text>
+                            </View>
+                            :
                             chunk(products, 2).slice(0, showNum).map((el, ind) => (
                                 <View
                                     style={{
                                         flexDirection: 'row',
-                                        marginBottom: hp(4),
+                                        marginBottom: hp(6),
                                         justifyContent: 'space-around'
                                     }}
+                                    key={ind}
                                 >
                                     {
                                         el.map((el2, ind2) => (
-                                            <View>
-                                                <Image
-                                                    style={{
-                                                        height: hp(20),
-                                                        width: hp(20),
-                                                        marginBottom: hp(1),
-                                                        marginLeft: hp(1)
-                                                    }}
-                                                    source={{
-                                                        uri: el2["url"]
-                                                    }}
-                                                />
-                                                <Text
-                                                    style={{
-                                                        fontWeight: "600",
-                                                        marginLeft: hp(2),
+                                            <View
+                                                key = {ind2}
+                                            >
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        navigation.navigate('EditProduct', {
+                                                            category: el2["category"],
+                                                            color: el2["color"],
+                                                            description: el2["description"],
+                                                            price: el2["price"],
+                                                            productImage: el2["productImage"],
+                                                            productName: el2["productName"],
+                                                            size: el2["size"],
+                                                            docId: el2["docId"]
+                                                        });
                                                     }}
                                                 >
-                                                    {el2["name"]}
-                                                </Text>
+                                                    <Image
+                                                        style={{
+                                                            height: hp(20),
+                                                            width: hp(20),
+                                                            marginBottom: hp(1.5),
+                                                            marginLeft: hp(1)
+                                                        }}
+                                                        source={{
+                                                            uri: el2["productImage"]
+                                                        }}
+                                                    />
+                                                </TouchableOpacity>
                                                 <Text
                                                     style={{
                                                         marginLeft: hp(2)
                                                     }}
                                                 >
-                                                    {el2["company"]}
+                                                    {el2["description"]}
                                                 </Text>
                                                 <Text
                                                     style={{
@@ -257,42 +190,59 @@ export default function ViewProducts(props) {
                                                         marginTop: hp(1),
                                                         fontWeight: "500",
                                                     }}
+                                                    onPress={() => {
+                                                        navigation.navigate('EditProduct', {
+                                                            category: el2["category"],
+                                                            color: el2["color"],
+                                                            description: el2["description"],
+                                                            price: el2["price"],
+                                                            productImage: el2["productImage"],
+                                                            productName: el2["productName"],
+                                                            size: el2["size"],
+                                                            docId: el2["docId"]
+                                                        });
+                                                    }}
                                                 >
                                                     ${el2["price"]}
                                                 </Text>
-                                                
+
                                             </View>
                                         ))
                                     }
-                                </View>  
+                                </View>
                             ))
                         }
                     </View>
-
-                    <Text
-                        style={{
-                            alignSelf: "center",
-                            textAlign: "center",
-
-                            width: "92%",
-                            height: hp(5),
-
-                            marginTop: hp(3),
-                            paddingTop: hp(1),
-
-                            fontSize: hp(2),
+                    <Button
+                        title="Explore More ▼"
+                        titleStyle={{
+                            color: "black"
+                        }}
+                        containerStyle={{
+                            marginBottom: hp(10)
+                        }}
+                        buttonStyle={{
+                            backgroundColor: 'white',
                             borderColor: "black",
                             borderRadius: hp(1),
-                            borderWidth: hp(0.1)
+                            borderWidth: hp(0.1),
+                            height: hp(5.6),
+                            width: "92%",
+                            alignSelf: "center",
+                            textAlign: "center"
                         }}
                         onPress={() => {
+                            if(showNum > products.length)
+                            {
+                                Toast.show({
+                                    type: 'error',
+                                    text1: 'No more products to show.'
+                                });
+                                return;
+                            }
                             setShowNum(showNum + 1)
                         }}
-                    >
-                        Explore More ▼
-                    </Text>
-                    <Text></Text>
-                    <Text></Text>
+                    />
                 </View>
             </ScrollView>
         </View>

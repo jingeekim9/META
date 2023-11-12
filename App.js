@@ -13,13 +13,14 @@ import AddProduct from './pages/Admin/AddProduct';
 import ViewProduct from './pages/Admin/ViewProduct';
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout';
+import EditProduct from './pages/Admin/EditProduct';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home'>
+      <Stack.Navigator initialRouteName='Admin'>
         <Stack.Screen
           name="Login"
           component={Login}
@@ -70,6 +71,11 @@ export default function App() {
         <Stack.Screen
           name = "Checkout"
           component = {Checkout}
+          options = {{headerShown:false}}
+        />
+        <Stack.Screen
+          name = "EditProduct"
+          component = {EditProduct}
           options = {{headerShown:false}}
         />
       </Stack.Navigator>
