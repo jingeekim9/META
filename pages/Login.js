@@ -86,6 +86,9 @@ export default function Login(props) {
                 setLoading(false);
             });
             }
+            else {
+                setLoading(false)
+            }
         } 
         autoLogin();
     }, [])
