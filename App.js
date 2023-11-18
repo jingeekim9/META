@@ -14,6 +14,7 @@ import ViewProduct from './pages/Admin/ViewProduct';
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout';
 import EditProduct from './pages/Admin/EditProduct';
+import AdminProfile from './pages/Admin/AdminProfile';
 
 const Stack = createStackNavigator();
 
@@ -78,6 +79,12 @@ export default function App() {
           component = {EditProduct}
           options = {{headerShown:false}}
         />
+        <Stack.Screen
+          name = "AdminProfile"
+          component = {AdminProfile}
+          options = {{headerShown:false}}
+        />
+        
       </Stack.Navigator>
       <Toast />
     </NavigationContainer>

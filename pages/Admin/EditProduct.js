@@ -163,7 +163,7 @@ export default function EditProduct(props) {
             }}
         >
             <Text style={styles.header}>
-                Add Product
+                Edit Product
             </Text>
             <Text style={styles.headerr}>
                 Last added by admin on Dec 19, 2023
