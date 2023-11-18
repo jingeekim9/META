@@ -28,7 +28,7 @@ export default function Products({ route, props, navigation }) {
     const [showNum, setShowNum] = useState(2);
     const [title, setTitle] = useState("")
     const [category, setCategory] = useState("shirt");
-    const {otherParam, display} = route.params;
+    const {otherParam, display, check} = route.params;
 
     function chunk(arr, len) {
         var chunks = [],
@@ -46,14 +46,16 @@ export default function Products({ route, props, navigation }) {
     useEffect(() => {
         const getDatabase = async () => {
             const productRef = collection(db, "Products");
-            const q = query(productRef, where("companyName", "==", otherParam));
+            let q = null;
+            if(check){
+                q = query(productRef, where("category", "==", otherParam));
+            } else{
+                q = query(productRef, where("companyName", "==", otherParam));
+            }
             const querySnapshot = await getDocs(q);
             var tempArray = []
             querySnapshot.forEach((doc) => {
                 var data = doc.data()
-                if (data["companyName"] != otherParam) {
-                    return;
-                }
                 tempArray.push({
                     "category": data["category"],
                     "color": data["color"],

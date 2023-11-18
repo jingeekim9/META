@@ -7,6 +7,7 @@ import { getFirestore } from 'firebase/firestore';
 import { collection, getDocs, where, query } from "firebase/firestore";
 import Toast from "react-native-toast-message";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -44,8 +45,9 @@ export default function ViewProduct({ route, props, navigation }) {
 
     useEffect(() => {
         const getDatabase = async () => {
+            var name = await AsyncStorage.getItem("name");
             const productRef = collection(db, "Products");
-            const q = query(productRef, where("companyName", "==", "Logncoding"));
+            const q = query(productRef, where("companyName", "==", name));
             const querySnapshot = await getDocs(q);
             var tempArray = []
             querySnapshot.forEach((doc) => {

@@ -88,12 +88,12 @@ export default function Home({ props, navigation }) {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     width: wp(100),
-                    paddingHorizontal: hp(2)
                 }}
             >
                 <View
                     style={{
-                        width: hp(4)
+                        width: hp(4),
+                        marginLeft: hp(2)
                     }}
                 >
 
@@ -107,17 +107,24 @@ export default function Home({ props, navigation }) {
                 >
                     UPPURPLE
                 </Text>
-                <Icon 
+                <Icon
                     type="ionicon"
                     name="person-circle-outline"
                     size={hp(4)}
+                    style={{
+                        marginRight: hp(2)
+                    }}
                     onPress={() => {
-                        props.navigation.navigate("Profile")
+                        navigation.navigate("Profile")
                     }}
                 />
             </View>
             <ScrollView>
-                <View>
+                <View
+                    style={{
+                        width: wp(100)
+                    }}
+                >
                     <Image
                         style={{
                             height: hp(45),
@@ -134,82 +141,126 @@ export default function Home({ props, navigation }) {
                             justifyContent: 'space-around'
                         }}
                     >
-                        <View
-                            style={{
-                                backgroundColor: '#f2ead5',
-                                borderRadius: hp(2),
-                                width: hp(7),
-                                height: hp(7),
-                                justifyContent: 'center',
-                                alignItems: 'center'
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('Products', {
+                                    otherParam: "T-shirt",
+                                    display: "https://assets.hermes.com/is/image/hermesproduct/h-embroidered-t-shirt--072025HA01-worn-5-0-0-800-800_g.jpg",
+                                    check: 1
+                                });
                             }}
                         >
-                            <Image 
-                                source={require('../assets/shirt.png')}
+                            <View
                                 style={{
-                                    width: hp(5),
-                                    height: hp(5)
+                                    backgroundColor: '#f2ead5',
+                                    borderRadius: hp(2),
+                                    width: hp(7),
+                                    height: hp(7),
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
                                 }}
-                                resizeMode="cover"
-                            />
-                        </View>
-                        <View
-                            style={{
-                                backgroundColor: '#f2ead5',
-                                borderRadius: hp(2),
-                                width: hp(7),
-                                height: hp(7),
-                                justifyContent: 'center',
-                                alignItems: 'center'
+                            >
+
+                                <Image
+                                    source={require('../assets/shirt.png')}
+                                    style={{
+                                        width: hp(5),
+                                        height: hp(5)
+                                    }}
+                                    resizeMode="cover"
+                                />
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('Products', {
+                                    otherParam: "Pants",
+                                    display: "https://media.wired.com/photos/611c5312798f0e2c853b702f/4:3/w_1375,h_1031,c_limit/Gear-Cargo-Pants-are-Back-1302952122.jpg",
+                                    check: 1
+                                });
                             }}
                         >
-                            <Image 
-                                source={require('../assets/pants.png')}
+                            <View
                                 style={{
-                                    width: hp(5),
-                                    height: hp(5)
+                                    backgroundColor: '#f2ead5',
+                                    borderRadius: hp(2),
+                                    width: hp(7),
+                                    height: hp(7),
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
                                 }}
-                                resizeMode="cover"
-                            />
-                        </View>
-                        <View
-                            style={{
-                                backgroundColor: '#f2ead5',
-                                borderRadius: hp(2),
-                                width: hp(7),
-                                height: hp(7),
-                                justifyContent: 'center',
-                                alignItems: 'center'
+                            >
+
+                                <Image
+                                    source={require('../assets/pants.png')}
+                                    style={{
+                                        width: hp(5),
+                                        height: hp(5)
+                                    }}
+                                    resizeMode="cover"
+                                />
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('Products', {
+                                    otherParam: "Outerwear",
+                                    display: "https://buffalojackson.com/cdn/shop/products/thompson-leather-moto-jacket-black-4_029f49bf-085e-4ca5-8cef-faef56e4ec35_800x.jpg?v=1642952150",
+                                    check: 1
+                                });
                             }}
                         >
-                            <Image 
-                                source={require('../assets/jacket.png')}
+                            <View
                                 style={{
-                                    width: hp(5),
-                                    height: hp(5)
+                                    backgroundColor: '#f2ead5',
+                                    borderRadius: hp(2),
+                                    width: hp(7),
+                                    height: hp(7),
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
                                 }}
-                                resizeMode="cover"
-                            />
-                        </View>
-                        <View
-                            style={{
-                                backgroundColor: '#f2ead5',
-                                borderRadius: hp(2),
-                                width: hp(7),
-                                height: hp(7),
-                                justifyContent: 'center',
-                                alignItems: 'center'
+                            >
+
+                                <Image
+                                    source={require('../assets/jacket.png')}
+                                    style={{
+                                        width: hp(5),
+                                        height: hp(5)
+                                    }}
+                                    resizeMode="cover"
+                                />
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('Products', {
+                                    otherParam: "Accessory",
+                                    display: "https://css.brilliantearth.com/static/img/gateway/earrings/ir350/Earrings_Gateway_Review_Image2_Desktop.jpg",
+                                    check: 1
+                                });
                             }}
                         >
-                            <Image 
-                                source={require('../assets/shoe.png')}
+                            <View
                                 style={{
-                                    width: hp(5),
-                                    height: hp(5)
+                                    backgroundColor: '#f2ead5',
+                                    borderRadius: hp(2),
+                                    width: hp(7),
+                                    height: hp(7),
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
                                 }}
-                                resizeMode="cover"
-                            />
-                        </View>
+                            >
+                                
+                                    <Image 
+                                        source={require('../assets/shoe.png')}
+                                        style={{
+                                            width: hp(5),
+                                            height: hp(5)
+                                        }}
+                                        resizeMode="cover"
+                                    />
+                            </View>
+                        </TouchableOpacity>
                     </View>
 
                     {/* ********************************** */}
@@ -254,7 +305,8 @@ export default function Home({ props, navigation }) {
                                         onPress={() => {
                                             navigation.navigate('Products', {
                                                 otherParam: el[0],
-                                                display: el[1]
+                                                display: el[1],
+                                                check: 0
                                             });
                                         }}
                                     />
@@ -454,126 +506,6 @@ export default function Home({ props, navigation }) {
                         >
                             SHOULDER BAGS
                         </Text>
-                    </View>
-
-                    {/* ********************************** */}
-
-                    <Text
-                        style={{
-                            fontSize: hp(3),
-                            fontWeight: "500",
-                            marginTop: hp(4),
-                            marginLeft: hp(1),
-                            marginBottom: hp(2.4)
-                        }}
-                    >
-                        Popular Brands of Seoul
-                    </Text>
-                    <View
-                        style={{
-                            height: hp(60)
-                        }}
-                    >
-                        <ScrollView
-                            horizontal={true}
-                            decelerationRate={0}
-                            snapToInterval={hp(42)}
-                            snapToAlignment={"center"}
-                        >
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(50),
-                                        width: hp(40),
-                                        marginLeft: hp(2)
-                                    }}
-                                    source={{
-                                        uri: "https://image.musinsa.com/mfile_s01/2021/04/07/3fb5ed13afe8714a7e5d13ee506003dd143755.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontWeight: "500",
-                                        fontSize: hp(2.5)
-                                    }}
-                                >
-                                    VOLANTE
-                                </Text>
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontSize: hp(1.8)
-                                    }}
-                                >
-                                    FW23 easy & comfy styles
-                                </Text>
-                            </View>
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(50),
-                                        width: hp(40),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://image.musinsa.com/mfile_s01/2022/02/23/8e2171ee6437c653bdcbcd807ccd8c72143902.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontWeight: "500",
-                                        fontSize: hp(2.5)
-                                    }}
-                                >
-                                    MUNIER
-                                </Text>
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontSize: hp(1.8)
-                                    }}
-                                >
-                                    FW23 collection Hype & Street
-                                </Text>
-                            </View>
-                            <View>
-                                <Image
-                                    style={{
-                                        height: hp(50),
-                                        width: hp(40),
-                                        marginLeft: hp(1)
-                                    }}
-                                    source={{
-                                        uri: "https://www.ktnews.com/news/photo/202102/118136_75566_3350.jpg"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontWeight: "500",
-                                        fontSize: hp(2.5)
-                                    }}
-                                >
-                                    GLW
-                                </Text>
-                                <Text
-                                    style={{
-                                        marginLeft: hp(2),
-                                        marginTop: hp(1),
-                                        fontSize: hp(1.8)
-                                    }}
-                                >
-                                    New brand release — VOLTEX collection
-                                </Text>
-                            </View>
-                        </ScrollView>
                     </View>
                 </View>
             </ScrollView>

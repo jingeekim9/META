@@ -132,13 +132,17 @@ export default function Detail({ props, route, navigation }) {
         }
         setCheckoutLoading(true);
 
+        var email = await AsyncStorage.getItem('email');
+
         const docRef = await addDoc(collection(db, "Checkout"), {
             productName: productName,
             price: price,
             category: category,
             size: size,
             color: color,
-            companyName: companyName
+            companyName: companyName,
+            productImage: productImage,
+            email: email
         });
 
         setCheckoutLoading(false);
