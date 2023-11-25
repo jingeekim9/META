@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, Platform, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, SafeAreaView, Platform, ScrollView } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Input, Button, color } from '@rneui/base';
 import { initializeApp } from "firebase/app";
@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon, AirbnbRating } from '@rneui/themed';
 import { Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import Toast from "react-native-toast-message";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -26,7 +25,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Firestore
 const db = getFirestore(app);
 
-export default function Detail({ props, route, navigation }) {
+export default function Detail(props) {
     const [heartPressed, setHeartPress] = useState(false);
     const [category, setCategory] = useState("");
     const [price, setPrice] = useState("");
@@ -37,8 +36,7 @@ export default function Detail({ props, route, navigation }) {
     const [checkoutPressed, setcheckoutPressed] = useState(false);
     const [options1Pressed, setoptions1Pressed] = useState(false);
     const [options2Pressed, setoptions2Pressed] = useState(false);
-    const [checkoutLoading, setCheckoutLoading] = useState(false);
-    const [color, setColor] = useState("");
+    const [color, setColor] = useState([]);
     const [colorOpen, setColorOpen] = useState(false);
     const [colorOptions, setColorOptions] = useState([
         {label: "Red", value: "red"},
@@ -51,11 +49,9 @@ export default function Detail({ props, route, navigation }) {
         {label: "M", value: "M"}
     ])
 
-    const {otherParam} = route.params;
-
     useEffect(() => {
         const getDetails = async() => {
-            const docRef = doc(db, "Products", otherParam);
+            const docRef = doc(db, "Products", "79Fd9IWxIAFZvxTdSz1o");
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 var data = docSnap.data();
@@ -112,44 +108,7 @@ export default function Detail({ props, route, navigation }) {
 
         getDetails();
     }, [])
-    
-    const checkout = async() => {
-        if(color == "")
-        {
-            Toast.show({
-                type: 'error',
-                text1: "Please choose a color."
-            });
-            return;
-        }
-        else if(size == "")
-        {
-            Toast.show({
-                type: 'error',
-                text1: "Please choose a size."
-            });
-            return;
-        }
-        setCheckoutLoading(true);
 
-        var email = await AsyncStorage.getItem('email');
-
-        const docRef = await addDoc(collection(db, "Checkout"), {
-            productName: productName,
-            price: price,
-            category: category,
-            size: size,
-            color: color,
-            companyName: companyName,
-            productImage: productImage,
-            email: email
-        });
-
-        setCheckoutLoading(false);
-        setcheckoutPressed(false);
-        setColor("");
-        setSize("");
-    }
 
     return (
         <SafeAreaView
@@ -166,20 +125,14 @@ export default function Detail({ props, route, navigation }) {
                     flexDirection: 'row',
                     alignItems: 'center'
                 }}>
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.goBack()
+                <Image
+                    style={{
+                        width: hp(2.5),
+                        height: hp(2.5),
+                        marginLeft: hp(2)
                     }}
-                >
-                    <Image
-                        style={{
-                            width: hp(2.5),
-                            height: hp(2.5),
-                            marginLeft: hp(2)
-                        }}
-                        source={require('../assets/left-arrow.png')}
-                    />
-                </TouchableOpacity>
+                    source={require('../assets/left-arrow.png')}
+                />
                 <Text
                     style={{
                         fontSize: hp(3),
@@ -287,6 +240,35 @@ export default function Detail({ props, route, navigation }) {
                                 
                             </Text>
                         </View>
+                    </View>
+
+                    {/* Long Image */}
+                    <View
+                        style = {{
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
+                        <Image
+                                style={{
+                                    marginTop: hp(5)
+                            }}
+                            source={require('../assets/guy1.png')}
+
+                        />
+                        <Image
+                                style={{
+                                    marginTop: hp(5)
+                            }}
+                            source={require('../assets/guy2.png')}
+
+                        />
+                        <Image
+                                style={{
+                                    marginTop: hp(5)
+                            }}
+                            source={require('../assets/guy3.png')}
+
+                        />
                     </View>
                 </ScrollView>
 
@@ -396,10 +378,6 @@ export default function Detail({ props, route, navigation }) {
                                     fontWeight: 'bold',
                                     color: 'white'
                                 }}
-                                onPress={() => {
-                                    checkout();
-                                }}
-                                loading={checkoutLoading}
                             >
 
                                 Checkout
