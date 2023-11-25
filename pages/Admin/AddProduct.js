@@ -179,10 +179,10 @@ export default function AddProduct(props) {
                 placeholder="MEN'S LOAFER WITH HORSEBIT"
                 label={"Name"}
                 labelStyle={{
-                    marginLeft: hp(1),
                     marginBottom: hp(1),
                     fontWeight: "500",
-                    color: "black"
+                    color: "black",
+                    fontSize: hp(1.8)
                 }}
 
                 style={{
@@ -195,9 +195,7 @@ export default function AddProduct(props) {
                     borderRadius: hp(0.85),
                     borderBottomWidth: hp(0.2),
                     borderColor: "black",
-                    marginLeft: hp(1),
-                    height: hp(6),
-                    width: hp(42)
+                    height: hp(6)
                 }}
                 inputStyle={{
                     color: "#686c6e"
@@ -213,10 +211,10 @@ export default function AddProduct(props) {
 
 
                 labelStyle={{
-                    marginLeft: hp(1),
                     marginBottom: hp(1),
                     fontWeight: "500",
-                    color: "black"
+                    color: "black",
+                    fontSize: hp(1.8)
                 }}
                 keyboardType="numeric"
 
@@ -230,9 +228,7 @@ export default function AddProduct(props) {
                     borderRadius: hp(0.85),
                     borderBottomWidth: hp(0.2),
                     borderColor: "black",
-                    marginLeft: hp(1),
-                    height: hp(6),
-                    width: hp(42)
+                    height: hp(6)
                 }}
                 inputStyle={{
                     color: "#686c6e"
@@ -241,19 +237,42 @@ export default function AddProduct(props) {
                     setPrice(text);
                 }}
             />
-
-            <DropDownPicker 
-                open = {categoryOpen}
-                value = {category}
-                items = {categoryOptions}
-                setOpen={setcategoryOpen}
-                setValue={setCategory}
-                setItems={setcategoryOptions}
-                placeholder="Category"  
-                containerStyle={{}}
-                dropDownDirection="TOP"
-            />
-
+            <View
+                style={{
+                    paddingHorizontal: hp(1),
+                    marginBottom: hp(3),
+                    zIndex: 9999
+                }}
+            >
+                <Text
+                    style={{
+                        marginBottom: hp(1),
+                        fontWeight: "500",
+                        color: "black",
+                        fontSize: hp(1.8)
+                    }}
+                >
+                    Categories
+                </Text>
+                <DropDownPicker 
+                    open = {categoryOpen}
+                    value = {category}
+                    items = {categoryOptions}
+                    setOpen={setcategoryOpen}
+                    setValue={setCategory}
+                    setItems={setcategoryOptions}
+                    placeholder="Category"  
+                    dropDownDirection="BOTTOM"
+                    style={{
+                        borderWidth: hp(0.2),
+                        borderRadius: hp(0.85),
+                        borderBottomWidth: hp(0.2),
+                        borderColor: "black",
+                    }}
+                    listMode="SCROLLVIEW"
+                    zIndex={99999}
+                />
+            </View>
             {/* <Input
                 placeholder="Shoes"
                 label={"Category"}
@@ -289,7 +308,6 @@ export default function AddProduct(props) {
                 autoCapitalize={"none"}
                 label={"Size Options"}
                 labelStyle={{
-                    marginLeft: hp(1),
                     marginBottom: hp(1),
                     color: "black",
                     fontWeight: "500"
@@ -304,9 +322,7 @@ export default function AddProduct(props) {
                     borderRadius: hp(0.85),
                     borderBottomWidth: hp(0.2),
                     borderColor: "black",
-                    marginLeft: hp(1),
-                    height: hp(6),
-                    width: hp(42)
+                    height: hp(6)
                 }}
                 inputStyle={{
                     color: "#686c6e"
@@ -319,7 +335,6 @@ export default function AddProduct(props) {
                 placeholder="Black, Red"
                 label={"Color Options"}
                 labelStyle={{
-                    marginLeft: hp(1),
                     marginBottom: hp(1),
                     fontWeight: "500",
                     color: "black"
@@ -335,9 +350,7 @@ export default function AddProduct(props) {
                     borderRadius: hp(0.85),
                     borderBottomWidth: hp(0.2),
                     borderColor: "black",
-                    marginLeft: hp(1),
-                    height: hp(6),
-                    width: hp(42)
+                    height: hp(6)
                 }}
                 inputStyle={{
                     color: "#686c6e"
@@ -351,7 +364,6 @@ export default function AddProduct(props) {
                 autoCapitalize={"none"}
                 label={"Description"}
                 labelStyle={{
-                    marginLeft: hp(1),
                     marginBottom: hp(1),
                     color: "black",
                     fontWeight: "500"
@@ -366,9 +378,7 @@ export default function AddProduct(props) {
                     borderRadius: hp(0.85),
                     borderBottomWidth: hp(0.2),
                     borderColor: "black",
-                    marginLeft: hp(1),
                     height: hp(12),
-                    width: hp(42)
                 }}
                 inputStyle={{
                     color: "#686c6e"
