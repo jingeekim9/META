@@ -11,6 +11,7 @@ import { collection, doc, addDoc, getFirestore } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -35,6 +36,14 @@ export default function AddProduct(props) {
     const [color, setColor] = useState("");
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState("");
+    const [categoryOpen, setcategoryOpen] = useState(false);
+
+    const [categoryOptions, setcategoryOptions] = useState([
+        {label: "T-shirt", value: "T-shirt"},
+        {label: "Pants", value: "Pants"},
+        {label: "Outerwear", value: "Outerwear"},
+        {label: "Accessory", value: "Accessory"}
+    ])
 
     const pickImage = async() => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -142,10 +151,12 @@ export default function AddProduct(props) {
             color: color.split(","),
             description: description,
             productImage: downloadUrl,
-            companyName: name
+            companyName: name,
+            dateAdded: new Date()
         });
         setLoading(false);
-        props.navigation.replace("ViewProduct")
+        props.navigation.replace("Admin")
+
     }
 
     return (
@@ -163,9 +174,6 @@ export default function AddProduct(props) {
         >
             <Text style={styles.header}>
                 Add Product
-            </Text>
-            <Text style={styles.headerr}>
-                Last added by admin on Dec 19, 2023
             </Text>
             <Input
                 placeholder="MEN'S LOAFER WITH HORSEBIT"
@@ -233,7 +241,20 @@ export default function AddProduct(props) {
                     setPrice(text);
                 }}
             />
-            <Input
+
+            <DropDownPicker 
+                open = {categoryOpen}
+                value = {category}
+                items = {categoryOptions}
+                setOpen={setcategoryOpen}
+                setValue={setCategory}
+                setItems={setcategoryOptions}
+                placeholder="Category"  
+                containerStyle={{}}
+                dropDownDirection="TOP"
+            />
+
+            {/* <Input
                 placeholder="Shoes"
                 label={"Category"}
                 labelStyle={{
@@ -262,7 +283,7 @@ export default function AddProduct(props) {
                 onChangeText={(text) => {
                     setCategory(text);
                 }}
-            />
+            /> */}
             <Input
                 placeholder="XL, S, XS"
                 autoCapitalize={"none"}

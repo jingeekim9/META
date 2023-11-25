@@ -30,6 +30,7 @@ export default function Home({ props, navigation }) {
     const [companies, setCompanies] = useState([])
     const [showNum, setShowNum] = useState(2)
     const [recentProducts, setRecentProducts] = useState([]);
+    const [trendingProducts, setTrendingProducts] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
@@ -61,6 +62,18 @@ export default function Home({ props, navigation }) {
             querySnapshot.forEach((doc) => {
                 var data = doc.data()
                 tempArray.push([data["dateAdded"]["seconds"], data["productName"], data["productImage"], doc.id])
+            });
+            var sortedArray = tempArray.sort((a, b) => {
+                return b[0] - a[0];
+            });
+            setRecentProducts(sortedArray)
+        }
+        const getTrendingProducts = async () => {
+            const querySnapshot = await getDocs(collection(db, "Checkout"));
+            var tempArray = []
+            querySnapshot.forEach((doc) => {
+                var data = doc.data()
+                tempArray.push([])
             });
             var sortedArray = tempArray.sort((a, b) => {
                 return b[0] - a[0];
@@ -326,6 +339,26 @@ export default function Home({ props, navigation }) {
                             ))
                         }
                     </View>
+
+
+                    {
+                        companies.length == 0?
+                        <View
+                            style ={{
+                                alignItems: "center"
+                            }}>
+                            <Text
+                                style ={{
+                                    fontSize: hp(2),
+                                    color: 'gray'
+                                }}>
+                                No Companies to show
+                            </Text>
+                        </View>
+
+                        :
+
+                    
                     <Button
                         title="Explore More ▼"
                         titleStyle={{
@@ -357,7 +390,9 @@ export default function Home({ props, navigation }) {
                             setShowNum(showNum + Math.min(3, companies.length - showNum))
                         }}
                     />
+                    }
 
+                    
                     <Text
                         style={{
                             fontSize: hp(3),
@@ -369,6 +404,22 @@ export default function Home({ props, navigation }) {
                     >
                         Recently Added
                     </Text>
+                    {
+                        companies.length == 0?
+                        <View
+                            style={{
+                                alignItems: "center"
+                            }}>
+                            <Text
+                                style={{
+                                    fontSize: hp(2),
+                                    color: 'gray'
+                                }}>
+                                None Recently Added
+                            </Text>
+                        </View>
+                        :
+
                     <View
                         style={{
                             height: hp(23.5)
@@ -428,7 +479,7 @@ export default function Home({ props, navigation }) {
                             </View>
                         </ScrollView>
                     </View>
-
+                    }
                     {/* ********************************** */}
 
                     <Text
@@ -444,68 +495,63 @@ export default function Home({ props, navigation }) {
                     </Text>
                     <View
                         style={{
-                            flexDirection: "column",
-                            justifyContent: "space-around",
-                            height: hp(35)
-
+                            height: hp(23.5),
+                            marginBottom: hp(10)
                         }}
                     >
-                        <Text
-                            style={{
-                                textAlign: "center",
-                                fontSize: hp(2)
-                            }}
+                        <ScrollView
+                            horizontal={true}
                         >
-                            VARISTY JACKETS
-                        </Text>
-                        <View
-                            style={{
-                                backgroundColor: "#f0f0f2",
-                                alignSelf: "center",
-                                width: "92%",
-                                height: hp(0.1)
-                            }}
-                        ></View>
-                        <Text
-                            style={{
-                                textAlign: "center",
-                                fontSize: hp(2)
-                            }}
-                        >
-                            SWEATER SEASON
-                        </Text>
-                        <View
-                            style={{
-                                backgroundColor: "#f0f0f2",
-                                alignSelf: "center",
-                                width: "92%",
-                                height: hp(0.1)
-                            }}
-                        ></View>
-                        <Text
-                            style={{
-                                textAlign: "center",
-                                fontSize: hp(2)
-                            }}
-                        >
-                            LEATHER JACKETS
-                        </Text>
-                        <View
-                            style={{
-                                backgroundColor: "#f0f0f2",
-                                alignSelf: "center",
-                                width: "92%",
-                                height: hp(0.1)
-                            }}
-                        ></View>
-                        <Text
-                            style={{
-                                textAlign: "center",
-                                fontSize: hp(2)
-                            }}
-                        >
-                            SHOULDER BAGS
-                        </Text>
+                            <View
+                                style={{
+                                    flexDirection: "row"
+                                }}
+                            >
+                                {
+                                    recentProducts.slice(0, 5).map((el, ind) => (
+                                        <View
+                                            style={{
+                                                justifyContent: "space-around",
+                                            }}
+                                            key={ind}
+                                        >
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    navigation.navigate('Detail', {
+                                                        otherParam: el[3]
+                                                    });
+                                                }}
+                                            >
+                                                <Image
+                                                    style={{
+                                                        height: hp(18),
+                                                        width: hp(18),
+                                                        marginLeft: hp(2)
+                                                    }}
+                                                    source={{
+                                                        uri: el[2]
+                                                    }}
+                                                />
+                                            </TouchableOpacity>
+                                            <Text
+                                                style={{
+                                                    alignSelf: "center",
+                                                    fontWeight: "500"
+                                                }}
+                                                onPress={() => {
+                                                    navigation.navigate('Detail', {
+                                                        otherParam: el[3]
+                                                    });
+                                                }}
+                                            >
+                                                {el[1]}
+                                            </Text>
+
+                                        </View>
+                                    ))
+                                }
+                            </View>
+                        </ScrollView>
                     </View>
                 </View>
             </ScrollView>
