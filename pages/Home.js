@@ -326,6 +326,26 @@ export default function Home({ props, navigation }) {
                             ))
                         }
                     </View>
+
+
+                    {
+                        companies.length == 0?
+                        <View
+                            style ={{
+                                alignItems: "center"
+                            }}>
+                            <Text
+                                style ={{
+                                    fontSize: hp(2),
+                                    color: 'gray'
+                                }}>
+                                No Companies to show
+                            </Text>
+                        </View>
+
+                        :
+
+                    
                     <Button
                         title="Explore More ▼"
                         titleStyle={{
@@ -357,7 +377,9 @@ export default function Home({ props, navigation }) {
                             setShowNum(showNum + Math.min(3, companies.length - showNum))
                         }}
                     />
+                    }
 
+                    
                     <Text
                         style={{
                             fontSize: hp(3),
@@ -369,6 +391,22 @@ export default function Home({ props, navigation }) {
                     >
                         Recently Added
                     </Text>
+                    {
+                        companies.length == 0?
+                        <View
+                            style={{
+                                alignItems: "center"
+                            }}>
+                            <Text
+                                style={{
+                                    fontSize: hp(2),
+                                    color: 'gray'
+                                }}>
+                                None Recently Added
+                            </Text>
+                        </View>
+                        :
+
                     <View
                         style={{
                             height: hp(23.5)
@@ -428,7 +466,7 @@ export default function Home({ props, navigation }) {
                             </View>
                         </ScrollView>
                     </View>
-
+                    }
                     {/* ********************************** */}
 
                     <Text
