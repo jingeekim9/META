@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from '@rneui/themed';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { Icon } from '@rneui/themed';
 import Toast from "react-native-toast-message";
 import Products from "./Products";
@@ -73,16 +73,39 @@ export default function Home({ props, navigation }) {
             var tempArray = []
             querySnapshot.forEach((doc) => {
                 var data = doc.data()
-                tempArray.push([])
+                tempArray.push([data['productId']])
             });
-            var sortedArray = tempArray.sort((a, b) => {
-                return b[0] - a[0];
+            const occurrences = tempArray.reduce(function (acc, curr) {
+                return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+            }, {});
+
+            // Create items array
+            var items = Object.keys(occurrences).map(function (key) {
+                return [key, occurrences[key]];
             });
-            setRecentProducts(sortedArray)
+
+            // Sort the array based on the second element
+            items.sort(function (first, second) {
+                return second[1] - first[1];
+            });
+            var newArray = [];
+            for (var i = 0; i < items.length; i++) {
+                const docRef = doc(db, "Products", items[i][0]);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    var data = docSnap.data();
+                    newArray.push([data["dateAdded"]["seconds"], data["productName"], data["productImage"], doc.id])
+                } else {
+                    // docSnap.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }
+            setTrendingProducts(newArray)
         }
 
         getDatabase();
         getProducts();
+        getTrendingProducts();
     }, [])
 
     return (
@@ -263,15 +286,15 @@ export default function Home({ props, navigation }) {
                                     alignItems: 'center'
                                 }}
                             >
-                                
-                                    <Image 
-                                        source={require('../assets/shoe.png')}
-                                        style={{
-                                            width: hp(5),
-                                            height: hp(5)
-                                        }}
-                                        resizeMode="cover"
-                                    />
+
+                                <Image
+                                    source={require('../assets/shoe.png')}
+                                    style={{
+                                        width: hp(5),
+                                        height: hp(5)
+                                    }}
+                                    resizeMode="cover"
+                                />
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -342,57 +365,57 @@ export default function Home({ props, navigation }) {
 
 
                     {
-                        companies.length == 0?
-                        <View
-                            style ={{
-                                alignItems: "center"
-                            }}>
-                            <Text
-                                style ={{
-                                    fontSize: hp(2),
-                                    color: 'gray'
+                        companies.length == 0 ?
+                            <View
+                                style={{
+                                    alignItems: "center"
                                 }}>
-                                No Companies to show
-                            </Text>
-                        </View>
+                                <Text
+                                    style={{
+                                        fontSize: hp(2),
+                                        color: 'gray'
+                                    }}>
+                                    No Companies to show
+                                </Text>
+                            </View>
 
-                        :
+                            :
 
-                    
-                    <Button
-                        title="Explore More ▼"
-                        titleStyle={{
-                            color: "black"
-                        }}
-                        containerStyle={{
-                            marginBottom: hp(5),
-                            marginTop: hp(1.5)
-                        }}
-                        buttonStyle={{
-                            backgroundColor: 'white',
-                            borderColor: "black",
-                            borderRadius: hp(1),
-                            borderWidth: hp(0.1),
-                            height: hp(5.6),
-                            width: "92%",
-                            alignSelf: "center",
-                            textAlign: "center"
-                        }}
-                        onPress={() => {
-                            if (showNum == companies.length) {
-                                Toast.show({
-                                    type: 'error',
-                                    text1: 'No more companies to show.'
-                                });
-                                return;
-                            }
 
-                            setShowNum(showNum + Math.min(3, companies.length - showNum))
-                        }}
-                    />
+                            <Button
+                                title="Explore More ▼"
+                                titleStyle={{
+                                    color: "black"
+                                }}
+                                containerStyle={{
+                                    marginBottom: hp(5),
+                                    marginTop: hp(1.5)
+                                }}
+                                buttonStyle={{
+                                    backgroundColor: 'white',
+                                    borderColor: "black",
+                                    borderRadius: hp(1),
+                                    borderWidth: hp(0.1),
+                                    height: hp(5.6),
+                                    width: "92%",
+                                    alignSelf: "center",
+                                    textAlign: "center"
+                                }}
+                                onPress={() => {
+                                    if (showNum == companies.length) {
+                                        Toast.show({
+                                            type: 'error',
+                                            text1: 'No more companies to show.'
+                                        });
+                                        return;
+                                    }
+
+                                    setShowNum(showNum + Math.min(3, companies.length - showNum))
+                                }}
+                            />
                     }
 
-                    
+
                     <Text
                         style={{
                             fontSize: hp(3),
@@ -405,80 +428,80 @@ export default function Home({ props, navigation }) {
                         Recently Added
                     </Text>
                     {
-                        companies.length == 0?
-                        <View
-                            style={{
-                                alignItems: "center"
-                            }}>
-                            <Text
-                                style={{
-                                    fontSize: hp(2),
-                                    color: 'gray'
-                                }}>
-                                None Recently Added
-                            </Text>
-                        </View>
-                        :
-
-                    <View
-                        style={{
-                            height: hp(23.5)
-                        }}
-                    >
-                        <ScrollView
-                            horizontal={true}
-                        >
+                        companies.length == 0 ?
                             <View
                                 style={{
-                                    flexDirection: "row"
+                                    alignItems: "center"
+                                }}>
+                                <Text
+                                    style={{
+                                        fontSize: hp(2),
+                                        color: 'gray'
+                                    }}>
+                                    None Recently Added
+                                </Text>
+                            </View>
+                            :
+
+                            <View
+                                style={{
+                                    height: hp(23.5)
                                 }}
                             >
-                                {
-                                    recentProducts.slice(0, 5).map((el, ind) => (
-                                        <View
-                                            style={{
-                                                justifyContent: "space-around",
-                                            }}
-                                            key={ind}
-                                        >
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                    navigation.navigate('Detail', {
-                                                        otherParam: el[3]
-                                                    });
-                                                }}
-                                            >
-                                                <Image
+                                <ScrollView
+                                    horizontal={true}
+                                >
+                                    <View
+                                        style={{
+                                            flexDirection: "row"
+                                        }}
+                                    >
+                                        {
+                                            recentProducts.slice(0, 5).map((el, ind) => (
+                                                <View
                                                     style={{
-                                                        height: hp(18),
-                                                        width: hp(18),
-                                                        marginLeft: hp(2)
+                                                        justifyContent: "space-around",
                                                     }}
-                                                    source={{
-                                                        uri: el[2]
-                                                    }}
-                                                />
-                                            </TouchableOpacity>
-                                            <Text
-                                                style={{
-                                                    alignSelf: "center",
-                                                    fontWeight: "500"
-                                                }}
-                                                onPress={() => {
-                                                    navigation.navigate('Detail', {
-                                                        otherParam: el[3]
-                                                    });
-                                                }}
-                                            >
-                                                {el[1]}
-                                            </Text>
+                                                    key={ind}
+                                                >
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            navigation.navigate('Detail', {
+                                                                otherParam: el[3]
+                                                            });
+                                                        }}
+                                                    >
+                                                        <Image
+                                                            style={{
+                                                                height: hp(18),
+                                                                width: hp(18),
+                                                                marginLeft: hp(2)
+                                                            }}
+                                                            source={{
+                                                                uri: el[2]
+                                                            }}
+                                                        />
+                                                    </TouchableOpacity>
+                                                    <Text
+                                                        style={{
+                                                            alignSelf: "center",
+                                                            fontWeight: "500"
+                                                        }}
+                                                        onPress={() => {
+                                                            navigation.navigate('Detail', {
+                                                                otherParam: el[3]
+                                                            });
+                                                        }}
+                                                    >
+                                                        {el[1]}
+                                                    </Text>
 
-                                        </View>
-                                    ))
-                                }
+                                                </View>
+                                            ))
+                                        }
+                                    </View>
+                                </ScrollView>
                             </View>
-                        </ScrollView>
-                    </View>
                     }
                     {/* ********************************** */}
 
@@ -493,66 +516,82 @@ export default function Home({ props, navigation }) {
                     >
                         Trending Now
                     </Text>
-                    <View
-                        style={{
-                            height: hp(23.5),
-                            marginBottom: hp(10)
-                        }}
-                    >
-                        <ScrollView
-                            horizontal={true}
-                        >
+                    {
+                        companies.length == 0 ?
                             <View
                                 style={{
-                                    flexDirection: "row"
+                                    alignItems: "center"
+                                }}>
+                                <Text
+                                    style={{
+                                        fontSize: hp(2),
+                                        color: 'gray'
+                                    }}>
+                                    None Recently Added
+                                </Text>
+                            </View>
+                            :
+                            <View
+                                style={{
+                                    height: hp(23.5),
+                                    marginBottom: hp(10)
                                 }}
                             >
-                                {
-                                    recentProducts.slice(0, 5).map((el, ind) => (
-                                        <View
-                                            style={{
-                                                justifyContent: "space-around",
-                                            }}
-                                            key={ind}
-                                        >
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                    navigation.navigate('Detail', {
-                                                        otherParam: el[3]
-                                                    });
-                                                }}
-                                            >
-                                                <Image
+                                <ScrollView
+                                    horizontal={true}
+                                >
+                                    <View
+                                        style={{
+                                            flexDirection: "row"
+                                        }}
+                                    >
+                                        {
+                                            trendingProducts.slice(0, 5).map((el, ind) => (
+                                                <View
                                                     style={{
-                                                        height: hp(18),
-                                                        width: hp(18),
-                                                        marginLeft: hp(2)
+                                                        justifyContent: "space-around",
                                                     }}
-                                                    source={{
-                                                        uri: el[2]
-                                                    }}
-                                                />
-                                            </TouchableOpacity>
-                                            <Text
-                                                style={{
-                                                    alignSelf: "center",
-                                                    fontWeight: "500"
-                                                }}
-                                                onPress={() => {
-                                                    navigation.navigate('Detail', {
-                                                        otherParam: el[3]
-                                                    });
-                                                }}
-                                            >
-                                                {el[1]}
-                                            </Text>
+                                                    key={ind}
+                                                >
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            navigation.navigate('Detail', {
+                                                                otherParam: el[3]
+                                                            });
+                                                        }}
+                                                    >
+                                                        <Image
+                                                            style={{
+                                                                height: hp(18),
+                                                                width: hp(18),
+                                                                marginLeft: hp(2)
+                                                            }}
+                                                            source={{
+                                                                uri: el[2]
+                                                            }}
+                                                        />
+                                                    </TouchableOpacity>
+                                                    <Text
+                                                        style={{
+                                                            alignSelf: "center",
+                                                            fontWeight: "500"
+                                                        }}
+                                                        onPress={() => {
+                                                            navigation.navigate('Detail', {
+                                                                otherParam: el[3]
+                                                            });
+                                                        }}
+                                                    >
+                                                        {el[1]}
+                                                    </Text>
 
-                                        </View>
-                                    ))
-                                }
+                                                </View>
+                                            ))
+                                        }
+                                    </View>
+                                </ScrollView>
                             </View>
-                        </ScrollView>
-                    </View>
+                    }
                 </View>
             </ScrollView>
         </View>
