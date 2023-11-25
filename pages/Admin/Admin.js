@@ -273,7 +273,7 @@ export default function Admin({ route, props, navigation }) {
           elevation: 8,
         }}
         onPress={() => {
-          props.navigation.navigate("AddProduct");
+          navigation.navigate("AddProduct");
         }}
       />
     </View>

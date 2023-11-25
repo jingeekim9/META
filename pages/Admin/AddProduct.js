@@ -142,10 +142,11 @@ export default function AddProduct(props) {
             color: color.split(","),
             description: description,
             productImage: downloadUrl,
-            companyName: name
+            companyName: name,
+            dateAdded: new Date()
         });
         setLoading(false);
-        props.navigation.replace("ViewProduct")
+        props.navigation.replace("Admin")
     }
 
     return (
