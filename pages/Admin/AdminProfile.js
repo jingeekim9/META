@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, TextInput, ScrollView, StyleProp, TextStyle, StyleSheet, Platform } from "react-native";
 import { Input, Button, ButtonGroup, Icon, ListItem } from '@rneui/themed';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -27,7 +27,18 @@ const pickImage = async () => {
 }
 
 export default function AdminProfile(props) {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
 
+    useEffect(() => {
+        const setInfo = async() => {
+            var tempName = await AsyncStorage.getItem('name');
+            var tempEmail = await AsyncStorage.getItem('email');
+            setName(tempName);
+            setEmail(tempEmail);
+        }
+        setInfo();
+    }, [])
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -58,10 +69,16 @@ export default function AdminProfile(props) {
                             <View>
                                 <Text style={styles.sectionContentTitle}>Company Name</Text>
                             </View>
+                            <View>
+                                <Text style={styles.sectionContentText}>{name}</Text>
+                            </View>
                         </View>
                         <View style={styles.sectionContent}>
                             <View>
                                 <Text style={styles.sectionContentTitle}>Email</Text>
+                            </View>
+                            <View>
+                                <Text style={styles.sectionContentText}>{email}</Text>
                             </View>
                         </View>
                     </View>
