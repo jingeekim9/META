@@ -165,9 +165,6 @@ export default function EditProduct(props) {
             <Text style={styles.header}>
                 Edit Product
             </Text>
-            <Text style={styles.headerr}>
-                Last added by admin on Dec 19, 2023
-            </Text>
             <Input
                 placeholder="MEN'S LOAFER WITH HORSEBIT"
                 label={"Name"}
