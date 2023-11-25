@@ -43,8 +43,7 @@ export default function Checkout({ route, navigation }) {
 
     useEffect(() => {
         const getDatabase = async () => {
-            // var email = await AsyncStorage.getItem('email');
-            var email = "jingee@logncoding.com"
+            var email = await AsyncStorage.getItem('email');
             const productRef = collection(db, "Checkout");
             const q = query(productRef, where("email", "==", email))
             const querySnapshot = await getDocs(q);
