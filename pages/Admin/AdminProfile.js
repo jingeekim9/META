@@ -12,7 +12,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const pickImage = async() => {
+const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -21,7 +21,7 @@ const pickImage = async() => {
         exif: true
     });
 
-    if(!result.canceled) {
+    if (!result.canceled) {
         setProductImage(result.assets[0].uri)
     }
 }
@@ -67,53 +67,70 @@ export default function AdminProfile(props) {
                     </View>
                 </View>
                 <TouchableOpacity
-                style={{
-                    borderRadius: hp(5),
-                    width: wp(75),
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    marginTop: hp(2),
-                    backgroundColor: '#f2ead5',
-                    padding: hp(2)
-                }}
-                onPress={() => {
-                    pickImage();
-                }}
-            >
-                <Text
                     style={{
-                        textAlign: 'center',
-                        color: 'black',
-                        fontSize: hp(2),
-                        fontWeight: 'bold'
+                        borderRadius: hp(5),
+                        width: wp(75),
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        marginTop: hp(2),
+                        backgroundColor: '#f2ead5',
+                        padding: hp(2)
+                    }}
+                    onPress={() => {
+                        pickImage();
                     }}
                 >
-                    {
-                        "Add Logo Image"
-                    }
-                </Text>
-            </TouchableOpacity>
-            <Button
-                        title="Cancel"
-                        titleStyle={{
-                            color: "black",
-                            fontWeight: "500"
+                    <Text
+                        style={{
+                            textAlign: 'center',
+                            color: 'black',
+                            fontSize: hp(2),
+                            fontWeight: 'bold'
                         }}
-                        buttonStyle={{
-                            backgroundColor: "#E8F6F7",
-                            paddingVertical: hp(1.5)
-                        }}
-                        containerStyle={{
-                            borderRadius: hp(5),
-                            width: wp(80),
-                            marginLeft: 'auto',
-                            marginRight: 'auto',
-                            marginTop: hp(1)
-                        }}
-                        onPress={() => {
-                            props.navigation.goBack()
-                        }}
-                    />
+                    >
+                        {
+                            "Add Logo Image"
+                        }
+                    </Text>
+                </TouchableOpacity>
+                <Button
+                    title="Cancel"
+                    titleStyle={{
+                        color: "black",
+                        fontWeight: "500"
+                    }}
+                    buttonStyle={{
+                        backgroundColor: "#E8F6F7",
+                        paddingVertical: hp(1.5)
+                    }}
+                    containerStyle={{
+                        borderRadius: hp(5),
+                        width: wp(80),
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        marginTop: hp(1)
+                    }}
+                    onPress={() => {
+                        props.navigation.goBack()
+                    }}
+                />
+                <View style={[styles.section, { marginBottom: hp(10), marginTop: hp(5) }]}>
+                    <View style={styles.sectionContent}>
+                        <Button
+                            title={'Sign Out'}
+                            titleStyle={styles.buttonTitle}
+                            buttonStyle={styles.buttonStyle}
+                            containerStyle={{ width: '40%', marginLeft: 'auto', marginRight: 'auto' }}
+                            onPress={async () => {
+                                await AsyncStorage.removeItem('name');
+                                await AsyncStorage.removeItem('type');
+                                await AsyncStorage.removeItem('email');
+                                await AsyncStorage.removeItem('password');
+                                props.navigation.reset({ routes: [{ name: 'Login' }] });
+                            }}
+                        />
+                    </View>
+                </View>
             </ScrollView>
         </View>
     )
