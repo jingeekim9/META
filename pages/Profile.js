@@ -47,6 +47,16 @@ export default function Profile(props) {
             <ScrollView>
                 <View style={[styles.section, { marginBottom: hp(2) }]}>
                     <View style={styles.profileHeadContainer}>
+                        <View>
+                            <Icon 
+                                type="ionicon"
+                                name="arrow-back-outline"
+                                size={hp(4)}
+                                onPress={() => {
+                                    props.navigation.goBack()
+                                }}
+                            />
+                        </View>
                         <View style={styles.profileHead}>
                             <Icon
                                 name="person-outline"
@@ -54,6 +64,14 @@ export default function Profile(props) {
                                 size={hp(5)}
                                 type="ionicon"
                             />
+                        </View>
+                        <View
+                            style={{
+                                width: hp(4),
+                                height: hp(4)
+                            }}
+                        >
+
                         </View>
                     </View>
                 </View>
@@ -97,6 +115,30 @@ export default function Profile(props) {
                     </View>
                 </View>
                 <View style={styles.divider}></View>
+                <TouchableOpacity 
+                    style={[styles.sectionContentContainer,
+                        {
+                            paddingBottom: 0
+                        }
+                    ]}
+                    onPress={() => {
+                        props.navigation.navigate("Size")
+                    }}
+                >
+                    <View style={{
+                        padding: hp(1),
+                        paddingBottom: 0
+                    }}>
+                        <Text 
+                            style={{
+                                fontSize: hp(2),
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            My Size Data
+                        </Text>
+                    </View>
+                </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.sectionContentContainer}
                     onPress={() => {
@@ -151,8 +193,10 @@ const styles = StyleSheet.create({
         color: '#3B1CFF'
     },
     profileHeadContainer: {
-        alignItems: 'center',
+        alignItems: 'flex-start',
         marginTop: hp(6),
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     profileHead: {
         backgroundColor: '#fff6e9',

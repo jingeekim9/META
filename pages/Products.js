@@ -216,7 +216,7 @@ export default function Products({ route, props, navigation }) {
                                                         });
                                                     }}
                                                 >
-                                                    ${el2["price"]}
+                                                    {parseInt(el2["price"]).toLocaleString("ko-KR", { style: "currency", currency: "KRW" })}
                                                 </Text>
 
                                             </View>

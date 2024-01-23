@@ -41,72 +41,6 @@ export default function Register(props) {
     const [user, setUser] = useState("user");
     const [loading, setLoading] = useState(false);
 
-    const register = () => {
-        setLoading(true);
-
-        if (name == '') {
-            setNameError("Please input your name")
-            setLoading(false);
-        }
-        else if (email == '') {
-            setEmailError("Please input an email")
-            setLoading(false);
-        }
-        else if (password == '') {
-            setPasswordError("Please input a password")
-            setLoading(false);
-        }
-        else if (password != confirmPassword) {
-            setConfirmPasswordError("Please input the same password")
-            setLoading(false);
-        }
-        else if(user == "company" && companyLogo == null)
-        {
-            setCompanyLogoError("Please choose a company logo");
-            setLoading(false);
-        }
-        else {
-            createUserWithEmailAndPassword(auth, email, password) // if this code runs successfully
-                .then((userCredential) => {
-                    setLoading(false);
-                    const user = userCredential.user;
-
-                    if(user == "user")
-                    {
-                        addData();
-                    }
-                    else
-                    {
-                        addCompany();
-                    }
-
-                    props.navigation.reset({
-                        index: 0,
-                        routes: [{ name: "Login" }]
-                    });
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    if (errorCode.includes("invalid-email")) {
-                        setEmailError("Please enter a valid email");
-                    }
-                    else if (errorCode.includes("weak-password")) {
-                        setPasswordError("Please enter a stronger password");
-                    }
-                    setLoading(false);
-                })
-        }
-
-    }
-
-    const addData = async () => {
-        const docRef = await addDoc(collection(db, "Users"), {
-            email: email,
-            name: name,
-            type: user
-        });
-        console.log("Document written with ID: ", docRef.id);
-    }
 
     const addCompany = async() => {
 
@@ -145,6 +79,79 @@ export default function Register(props) {
         });
         console.log("Document written with ID: ", docRef.id);
     }
+
+    const register = () => {
+        setLoading(true);
+
+        if (name == '') {
+            setNameError("Please input your name")
+            setLoading(false);
+        }
+        else if (email == '') {
+            setEmailError("Please input an email")
+            setLoading(false);
+        }
+        else if (password == '') {
+            setPasswordError("Please input a password")
+            setLoading(false);
+        }
+        else if (password != confirmPassword) {
+            setConfirmPasswordError("Please input the same password")
+            setLoading(false);
+        }
+        else if(user == "company" && companyLogo == null)
+        {
+            setCompanyLogoError("Please choose a company logo");
+            setLoading(false);
+        }
+        else {
+            createUserWithEmailAndPassword(auth, email, password) // if this code runs successfully
+                .then(async(userCredential) => {
+                    setLoading(false);
+
+                    if(user == "user")
+                    {
+                        const docRef = await addDoc(collection(db, "Users"), {
+                            email: email,
+                            name: name,
+                            type: user
+                        });
+                        console.log("Document written with ID: ", docRef.id);
+                    }
+                    else
+                    {
+                        addCompany();
+                    }
+
+                    props.navigation.reset({
+                        index: 0,
+                        routes: [{ name: "Login" }]
+                    });
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    console.log(errorCode)
+                    if (errorCode.includes("invalid-email")) {
+                        setEmailError("Please enter a valid email");
+                    }
+                    else if (errorCode.includes("weak-password")) {
+                        setPasswordError("Please enter a stronger password");
+                    }
+                    setLoading(false);
+                })
+        }
+
+    }
+
+    const addData = async () => {
+        const docRef = await addDoc(collection(db, "Users"), {
+            email: email,
+            name: name,
+            type: user
+        });
+        console.log("Document written with ID: ", docRef.id);
+    }
+
 
     const pickImage = async () => {
         setCompanyLogoError("");

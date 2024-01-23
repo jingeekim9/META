@@ -128,7 +128,7 @@ export default function Home({ props, navigation }) {
             >
                 <View
                     style={{
-                        width: hp(4),
+                        width: hp(8),
                         marginLeft: hp(2)
                     }}
                 >
@@ -143,17 +143,32 @@ export default function Home({ props, navigation }) {
                 >
                     UPPURPLE
                 </Text>
-                <Icon
-                    type="ionicon"
-                    name="person-circle-outline"
-                    size={hp(4)}
+                <View
                     style={{
-                        marginRight: hp(2)
+                        flexDirection: 'row',
+                        alignItems: 'center'
                     }}
-                    onPress={() => {
-                        navigation.navigate("Profile")
-                    }}
-                />
+                >
+                    <Icon
+                        type="ionicon"
+                        name="person-circle-outline"
+                        size={hp(4)}
+                        onPress={() => {
+                            navigation.navigate("Profile")
+                        }}
+                    />
+                    <Icon
+                        type="ionicon"
+                        name="cart-outline"
+                        size={hp(4)}
+                        style={{
+                            marginRight: hp(2)
+                        }}
+                        onPress={() => {
+                            navigation.navigate("Cart")
+                        }}
+                    />
+                </View>
             </View>
             <ScrollView>
                 <View
@@ -166,10 +181,34 @@ export default function Home({ props, navigation }) {
                             height: hp(45),
                             width: "100%"
                         }}
-                        source={{
-                            uri: "https://uploads-ssl.webflow.com/60a3629e04f26d12caff56df/6263dbc988a34cd7a90e99b0_%EB%AC%B4%EC%8B%A0%EC%82%AC%20%EC%8A%A4%ED%83%A0%EB%8B%A4%EB%93%9C%20%EA%B7%B8%EB%A6%B0%EB%9D%BC%EC%9D%B8%20%EB%A1%A0%EC%B9%AD%20%EC%9D%B4%EB%AF%B8%EC%A7%80.jpg"
-                        }}
+                        source={require('../assets/main.jpg')}
                     />
+                    <View
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginVertical: hp(5)
+                        }}
+                    >
+                        <TouchableOpacity
+                            style={{
+                                backgroundColor: '#9c34f4',
+                                paddingVertical: hp(2),
+                                paddingHorizontal: hp(5),
+                                borderRadius: hp(2)
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontSize: hp(2),
+                                    color: 'white',
+                                    fontWeight: 'bold'
+                                }}
+                            >
+                                METAVERSE
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                     <View
                         style={{
                             flexDirection: "row",

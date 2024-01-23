@@ -7,6 +7,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, addDoc, getFirestore, query, where, getDocs } from "firebase/firestore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from "expo-status-bar";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC55iBDd_uZhjnoxzVeNmnNg8bTDEXD2Fo",
@@ -320,6 +321,7 @@ export default function Login(props) {
                     </Text>
                 </View>
             </View>
+            <StatusBar style="light" />
         </KeyboardAwareScrollView>
     )
 }

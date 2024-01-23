@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Detail from './pages/Detail';
 import Admin from './pages/Admin/Admin';
+import Size from './pages/Size';
 import Products from './pages/Products';
 import AddProduct from './pages/Admin/AddProduct';
 import ViewProduct from './pages/Admin/ViewProduct';
@@ -15,6 +16,7 @@ import Profile from './pages/Profile';
 import Checkout from './pages/Checkout';
 import EditProduct from './pages/Admin/EditProduct';
 import AdminProfile from './pages/Admin/AdminProfile';
+import Cart from './pages/Cart';
 
 const Stack = createStackNavigator();
 
@@ -84,7 +86,16 @@ export default function App() {
           component = {AdminProfile}
           options = {{headerShown:false}}
         />
-        
+        <Stack.Screen
+          name = "Size"
+          component = {Size}
+          options = {{headerShown:false}}
+        />
+        <Stack.Screen
+          name = "Cart"
+          component = {Cart}
+          options = {{headerShown:false}}
+        />
       </Stack.Navigator>
       <Toast />
     </NavigationContainer>
