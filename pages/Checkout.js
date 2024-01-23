@@ -44,7 +44,6 @@ export default function Checkout({ route, navigation }) {
             user: name
         });
         setLoading(false);
-        console.log("Document written with ID: ", docRef.id);
     }
 
     useEffect(() => {
