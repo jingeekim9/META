@@ -23,4 +23,19 @@ Follow these steps to get started with the Metaverse Shopping App:
 
 1. Clone the repository to your local machine.
    ```bash
-   git clone https://github.com/your-username/metaverse-shopping-app.git
+   git clone https://github.com/jingeekim9/META.git
+
+```bash
+
+# Navigate to the project directory
+```bash
+cd META
+```bash
+# Install dependencies
+```bash
+npm install
+```bash
+# Run the application
+```bash
+npx expo start
+```bash
