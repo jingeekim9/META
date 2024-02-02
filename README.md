@@ -38,5 +38,11 @@ Follow these steps to get started with the Metaverse Shopping App:
 
 4.  Run the application
    ```
-npx expo start
+   npx expo start
    ```
+
+## Requirements
+- Node.js
+- npm (Node Package Manager)
+- React Native CLI
+- Android Studio / Xcode (for emulator/simulator)
